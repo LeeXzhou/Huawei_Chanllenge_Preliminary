@@ -93,7 +93,7 @@ int main()
 		int id = Input();
 		for (int i = 0; i < robot_num; i++)
 		{
-			cout << "move " << i << rand() % 4 << endl;
+			cout << "move " << i << " " << rand() % 4 << endl;
 		}
 		puts("OK");
 		fflush(stdout);
