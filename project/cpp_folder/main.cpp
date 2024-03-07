@@ -1,7 +1,12 @@
 #include <iostream>
 #include "../h_folder/search_policy.h"
 using namespace std;
-
+Berth berth[berth_num + 10];
+Robot robot[robot_num + 10];
+Boat boat[10];
+int money, boat_capacity, id;
+char ch[N][N];
+int gds[N][N];
 void Init()
 {
 	for (int i = 1; i <= n; i++)
