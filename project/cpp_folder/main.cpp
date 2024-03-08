@@ -7,7 +7,48 @@ Boat boat[10];
 int money, boat_capacity, id;
 char ch[N][N];
 pair<int, int> goods_map[N][N];
-short dis[205][205][10];	//-1±íÊ¾²»¿É´ï
+short dis[205][205][10];	//-1è¡¨ç¤ºä¸å¯è¾¾
+
+// æ±‚å‡ºæ¯ä¸ªç‚¹åˆ°10ä¸ªæ¸¯å£çš„æœ€çŸ­è·ç¦»
+void init_dis() {
+	bool vis[205][205][10];	    //åœ¨BFSä¸­åˆ¤æ–­æ˜¯å¦ä½¿ç”¨è¿‡
+	int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
+    	memset(dis, -1, sizeof(dis));
+	queue<pair<int, int> > q;
+
+	auto check_boundary = [&](int x, int y)->bool {
+		return x < 0 || x >= n || y < 0 || y >= n || ch[x][y] == '*' || ch[x][y] == '#';
+	};
+
+    auto cal_dis = [&](int id)->void {
+        while(q.size()) {
+            pair<int, int> tp = q.front(); q.pop();
+            int x = tp.first, y = tp.second;
+            for(int i = 0; i < 4; i++) {
+                int _x = x + dx[i], _y = y + dy[i];
+                if(vis[_x][_y][id] || check_boundary(_x, _y)) 
+                    continue;
+                vis[_x][_y][id] = 1;
+                dis[_x][_y][id] = dis[x][y][id] + 1;
+                q.push({_x, _y});
+            }
+        }
+    };
+
+	// å¯ä¼˜åŒ–ï¼šæ¸¯å£çš„åŠå²›å½¢æ€å¯ä»¥åªBFSä¸€ä¾§
+    for(int i = 0; i < berth_num; i++) {
+        for(int x = 0; x < 4; x++) {
+            for(int y = 0; y < 4; y++) {
+                int _x = berth[i].x + x, _y = berth[i].y + y;
+                q.emplace(_x, _y);
+                dis[_x][_y][id] = 0;
+                vis[_x][_y][id] = 1;
+            }
+	}
+        cal_dis(i);
+    }
+
+}
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -21,14 +62,11 @@ void Init()
 		cin >> berth[id].x >> berth[id].y >> berth[id].transport_time >> berth[id].loading_speed;
 	}
 	cin >> boat_capacity;
-	char okk[100];	//²»ÖªµÀ¸ÉÂïµÄ
+	char okk[100];	//ä¸çŸ¥é“å¹²å˜›çš„
 	cin >> okk;
-	/*
-	Çó³öÃ¿¸öµãµ½10¸ö¸Û¿ÚµÄ×î¶Ì¾àÀë
-	4e5µÄ¿Õ¼ä´óĞ¡ short
-	£¿½«µØÍ¼ĞÅÏ¢½µÎ¬´¦Àí
+
+	init_dis();
 	
-	*/
 	cout << "OK" << endl;
 	fflush(stdout);
 }
