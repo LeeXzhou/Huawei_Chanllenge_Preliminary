@@ -1,4 +1,5 @@
 #include "../h_folder/search_policy.h"
+#include "../h_folder/my_algorithm.h"
 using namespace std;
 Berth berth[berth_num + 10];
 Robot robot[robot_num + 10];
@@ -63,11 +64,14 @@ int main()
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
 		id = Input();
+		my_alg::test_player0();
+		/*
 		cerr << id << "!";
 		for (int i = 0; i < robot_num; i++)
 		{
 			cout << "move " << i << " " << rand() % 4 << endl;
 		}
+		*/
 		puts("OK");
 		fflush(stdout);
 	}
