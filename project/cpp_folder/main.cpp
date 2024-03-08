@@ -20,7 +20,7 @@ void Init()
 		cin >> berth[id].x >> berth[id].y >> berth[id].transport_time >> berth[id].loading_speed;
 	}
 	cin >> boat_capacity;
-	char okk[100];
+	char okk[100];	//不知道干嘛的
 	cin >> okk;
 	/*
 	求出每个点到10个港口的最短距离

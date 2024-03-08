@@ -2,6 +2,7 @@
 #define record_h
 #include <utility>
 #include <iostream>
+#include <queue>
 using namespace std;
 const int n = 200;
 const int robot_num = 10;
