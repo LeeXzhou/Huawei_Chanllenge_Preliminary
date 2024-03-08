@@ -1,6 +1,7 @@
 #ifndef record_h
 #define record_h
 #include <utility>
+#include <iostream>
 using namespace std;
 const int n = 200;
 const int robot_num = 10;
@@ -11,7 +12,7 @@ class Robot {
 public:
 	int x = -1, y = -1, goods = -1;
 	int status = -1;
-	int mbx = -1, mby = -1;
+	int target_x = -1, target_y = -1;
 	Robot() { };
 	Robot(int startX, int startY);
 };
@@ -28,7 +29,7 @@ public:
 
 class Boat {
 public:
-	int num = -1, pos = -1, status = -1;
+	int num = 0, pos = -1, status = -1;
 	Boat() { };
 };
 extern Berth berth[berth_num + 10];
@@ -37,6 +38,6 @@ extern Boat boat[10];
 extern int money, boat_capacity, id;
 extern char ch[N][N];
 extern pair<int, int> goods_map[N][N]; //first记录value， second记录到期时间
-extern short dis[40005][10];
+extern short dis [205][205][10];
 #endif // !record_h
 
