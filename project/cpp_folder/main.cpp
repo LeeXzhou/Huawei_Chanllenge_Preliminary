@@ -6,7 +6,7 @@ Robot robot[robot_num + 10];
 Boat boat[10];
 int money, boat_capacity, id;
 char ch[N][N];
-int gds[N][N];
+pair<int, int> goods_map[N][N];
 short dis[40005][10];
 void Init()
 {
@@ -42,7 +42,7 @@ int Input()
 	{
 		int x, y, val;
 		cin >> x >> y >> val;
-		cerr << val << endl;
+		goods_map[x][y] = { val, id + 1000 };
 	}
 	for (int i = 0; i < robot_num; i++)
 	{
@@ -64,6 +64,7 @@ int main()
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
 		id = Input();
+		cerr << id << "!";
 		for (int i = 0; i < robot_num; i++)
 		{
 			cout << "move " << i << " " << rand() % 4 << endl;

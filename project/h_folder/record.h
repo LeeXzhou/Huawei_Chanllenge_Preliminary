@@ -1,11 +1,12 @@
 #ifndef record_h
 #define record_h
 #include <utility>
+using namespace std;
 const int n = 200;
 const int robot_num = 10;
 const int berth_num = 10;
 const int N = 210;
-extern std::pair<int, int> pre_position[205][205];
+extern pair<int, int> pre_position[205][205];
 class Robot {
 public:
 	int x = -1, y = -1, goods = -1;
@@ -35,7 +36,7 @@ extern Robot robot[robot_num + 10];
 extern Boat boat[10];
 extern int money, boat_capacity, id;
 extern char ch[N][N];
-extern int gds[N][N];
+extern pair<int, int> goods_map[N][N]; //first记录value， second记录到期时间
 extern short dis[40005][10];
 #endif // !record_h
 
