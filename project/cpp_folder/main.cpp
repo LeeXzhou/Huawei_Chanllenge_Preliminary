@@ -9,9 +9,9 @@ pair<int, int> goods_map[N][N];
 short dis[205][205][10];	//-1表示不可达
 void Init()
 {
-	for (int i = 1; i <= n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		cin >> ch[i] + 1;
+		cin >> ch[i];
 	}
 		
 	for (int i = 0; i < berth_num; i++)
