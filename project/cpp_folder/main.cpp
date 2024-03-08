@@ -7,6 +7,7 @@ Boat boat[10];
 int money, boat_capacity, id;
 char ch[N][N];
 int gds[N][N];
+short dis[40005][10];
 void Init()
 {
 	for (int i = 1; i <= n; i++)
@@ -22,7 +23,12 @@ void Init()
 	cin >> boat_capacity;
 	char okk[100];
 	cin >> okk;
-
+	/*
+	求出每个点到10个港口的最短距离
+	4e5的空间大小 short
+	？将地图信息降维处理
+	
+	*/
 	cout << "OK" << endl;
 	fflush(stdout);
 }
@@ -36,6 +42,7 @@ int Input()
 	{
 		int x, y, val;
 		cin >> x >> y >> val;
+		cerr << val << endl;
 	}
 	for (int i = 0; i < robot_num; i++)
 	{

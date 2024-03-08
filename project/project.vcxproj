@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp_folder\main.cpp" />
+    <ClCompile Include="cpp_folder\my_algorithm.cpp" />
     <ClCompile Include="cpp_folder\record.cpp" />
     <ClCompile Include="cpp_folder\search_policy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="h_folder\my_algorithm.h" />
     <ClInclude Include="h_folder\record.h" />
     <ClInclude Include="h_folder\search_policy.h" />
   </ItemGroup>

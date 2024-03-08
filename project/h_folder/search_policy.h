@@ -5,18 +5,19 @@
 using namespace std;
 /*
 思路1：嗯贪，value/time最大的是最优方案
+不变性条件：若干个参数去决定拿个方案是最优的，
 */
-struct plan{
+struct Plan{
 	int value = 0, time = 0, id, pre_x, pre_y;
-	plan(int v, int t, int i, int x, int y);
-	bool operator < (const plan& tmp) const;
+	Plan(int v, int t, int i, int x, int y);
+	bool operator < (const Plan& tmp) const;
 };
-struct record {
+struct Record {
 	int val, time, cur_x, cur_y;
 };
-class search_policy {
+class Search_Policy {
 public:
-	static priority_queue<plan, vector<plan>, less<plan>> policy;	//留到最后选择方案用
+	static priority_queue<Plan, vector<Plan>, less<Plan>> policy;	//留到最后选择方案用
 	pair<int, int> choose();
 	void BFS(int x, int y);
 private:

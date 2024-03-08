@@ -24,12 +24,18 @@
     <ClCompile Include="cpp_folder\search_policy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="cpp_folder\my_algorithm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h_folder\record.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="h_folder\search_policy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="h_folder\my_algorithm.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
