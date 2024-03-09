@@ -32,7 +32,7 @@ namespace my_alg {
 		}
 		return false;
 	}
-	void find_road(int x = -1, int y = -1)
+	void find_road(int x, int y)
 	{
 		if (x != -1)	//’“≤¥Œª
 		{

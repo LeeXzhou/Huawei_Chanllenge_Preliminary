@@ -56,7 +56,6 @@ void init_dis() {
 	}
         cal_dis(i);
     }
-
 }
 void Init()
 {
@@ -75,7 +74,6 @@ void Init()
 	cin >> okk;
 
 	init_dis();
-	
 	cout << "OK" << endl;
 	fflush(stdout);
 }
@@ -108,10 +106,24 @@ int Input()
 int main()
 {
 	Init();
+	//init_dis调用的位置不知道可不可以在Init中，可以测一下
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
+		for (int i = 0; i < 200; i++)
+		{
+			for (int j = 0; j < 200; j++)
+			{
+				for (int z = 0; z < 10; z++)
+				{
+					if (dis[i][j][z] > 0)
+					{
+						cerr << "I find it" << endl;
+					}
+				}
+			}
+		}
 		id = Input();
-		my_alg::test_player0();
+		//my_alg::test_player0();
 		/*
 		cerr << id << "!";
 		for (int i = 0; i < robot_num; i++)
