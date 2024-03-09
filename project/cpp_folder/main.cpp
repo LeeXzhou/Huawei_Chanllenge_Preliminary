@@ -11,7 +11,16 @@ short dis[205][205][10];	//-1表示不可达
 
 // 求出每个点到10个港口的最短距离
 void init_dis() {
-	bool vis[205][205][10];	    //在BFS中判断是否使用过
+	bool vis[205][205][10];
+	/*
+	unique_ptr<unique_ptr<unique_ptr<bool[]>[]>[]> vis(new unique_ptr<unique_ptr<bool[]>[]>[205]);
+	for (int i = 0; i < 205; ++i) {
+		vis[i].reset(new std::unique_ptr<bool[]>[205]);
+		for (int j = 0; j < 205; ++j) {
+			vis[i][j].reset(new bool[10]);
+		}
+	}
+	*/
 	int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
     	memset(dis, -1, sizeof(dis));
 	queue<pair<int, int> > q;

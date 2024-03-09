@@ -166,10 +166,10 @@ namespace my_alg {
 		else
 		{
 			//继续走就是了
-			pair<int, int> now = { cur_x, cur_y }, a[4] = { {0, 1} , {0, -1}, {-1, 0}, {1, 0 } };
+			pair<int, int> now = { cur_x, cur_y };
 			for (int i = 0; i < 4; i++)
 			{
-				if (now + a[i] == nxt[cur_x][cur_y])
+				if (now + dx_dy[i] == nxt[cur_x][cur_y])
 				{
 					cout << "move 0 " << i << endl;
 					cerr << now << i << endl;
