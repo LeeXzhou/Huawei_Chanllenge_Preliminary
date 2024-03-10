@@ -199,7 +199,10 @@ namespace my_alg {
 	}
 	void test_player0()
 	{
-		robot_control();
+		for (int i = 0; i < 10; i++)
+		{
+			robot[i].robot_control();
+		}
 		boat_control();
 	}
 }

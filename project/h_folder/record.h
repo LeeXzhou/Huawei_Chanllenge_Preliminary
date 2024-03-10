@@ -1,24 +1,16 @@
 #ifndef record_h
 #define record_h
-#include <utility>
-#include <iostream>
 #include <queue>
+#include "my_data_structure.h"
+#include <cstring>
 using namespace std;
 const int n = 200;
 const int robot_num = 10;
 const int berth_num = 10;
 const int N = 210;
 extern pair<int, int> pre_position[205][205];
-using MyPair = std::pair<int, int>;
-
-// 重载 pair 的加法运算符
-const MyPair operator+(const MyPair& a, const MyPair& b);
-
-// 重载 pair 的减法运算符
-const MyPair operator-(const MyPair& a, const MyPair& b);
-
-// 重载输出运算符
-std::ostream& operator<<(std::ostream& os, const MyPair& p);
+const MyPair dx_dy[4] = { {0, 1} , {0, -1}, {-1, 0}, {1, 0} };
+bool check_valid(int x, int y);
 class Robot {
 public:
 	int x = -1, y = -1, goods = -1;
@@ -26,6 +18,10 @@ public:
 	int target_x = -1, target_y = -1;
 	Robot() { };
 	Robot(int startX, int startY);
+	void robot_control();
+	MyPair pre[205][205], nxt[205][205];
+	bool visited[205][205];
+	int robot_id = 0;
 };
 
 class Berth {
