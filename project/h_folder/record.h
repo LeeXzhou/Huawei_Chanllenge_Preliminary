@@ -9,6 +9,16 @@ const int robot_num = 10;
 const int berth_num = 10;
 const int N = 210;
 extern pair<int, int> pre_position[205][205];
+using MyPair = std::pair<int, int>;
+
+// 重载 pair 的加法运算符
+const MyPair operator+(const MyPair& a, const MyPair& b);
+
+// 重载 pair 的减法运算符
+const MyPair operator-(const MyPair& a, const MyPair& b);
+
+// 重载输出运算符
+std::ostream& operator<<(std::ostream& os, const MyPair& p);
 class Robot {
 public:
 	int x = -1, y = -1, goods = -1;

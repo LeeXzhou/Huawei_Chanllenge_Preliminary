@@ -1,23 +1,6 @@
 #include "../h_folder/my_algorithm.h"
 using namespace std;
 bool visited[205][205];
-template<class Ty1, class Ty2>
-const pair<Ty1, Ty2> operator+(const pair<Ty1, Ty2>& p1, const pair<Ty1, Ty2>& p2)
-{
-	return make_pair(p1.first + p2.first, p1.second + p2.second);
-}
-
-template<class Ty1, class Ty2>
-const pair<Ty1, Ty2> operator-(const pair<Ty1, Ty2>& p1, const pair<Ty1, Ty2>& p2)
-{
-	return make_pair(p1.first - p2.first, p1.second - p2.second);
-}
-
-template <class T, class U>
-std::ostream& operator<<(std::ostream& os, const std::pair<T, U>& p) {
-	os << "(" << p.first << ", " << p.second << ")";
-	return os;
-}
 
 namespace my_alg {
 	void BFS()
@@ -61,7 +44,7 @@ namespace my_alg {
 			memset(visited, false, sizeof(visited));
 			memset(nxt, 0, sizeof(nxt));
 			visited[cur_x][cur_y] = true;
-			queue<pair<int, int>> q;
+			queue<MyPair> q;
 			q.push({ cur_x, cur_y });
 			bool found = false;
 			int step = 0;
@@ -70,14 +53,14 @@ namespace my_alg {
 				int q_size = q.size();
 				for (int j = 1; j <= q_size; j++)
 				{
-					pair<int, int> u = q.front();
+					MyPair u = q.front();
 					q.pop();
 					if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step)
 					{
 						found = true;
 						robot[0].target_x = u.first;
 						robot[0].target_y = u.second;
-						pair<int, int> now = u, tmp = { 0, 0 };
+						MyPair now = u, tmp = { 0, 0 };
 						while (tmp.first != cur_x || tmp.second != cur_y)
 						{
 							tmp = pre[now.first][now.second];
@@ -125,7 +108,7 @@ namespace my_alg {
 				memset(visited, false, sizeof(visited));
 				visited[cur_x][cur_y] = true;
 				memset(nxt, 0, sizeof(nxt));
-				queue<pair<int, int>> q;
+				queue<MyPair> q;
 				q.push({ cur_x, cur_y });
 				bool found = false;
 				int step = 0;
@@ -134,12 +117,12 @@ namespace my_alg {
 					int q_size = q.size();
 					for (int j = 1; j <= q_size; j++)
 					{
-						pair<int, int> u = q.front();
+						MyPair u = q.front();
 						q.pop();
 						if (u.first == berth[0].x && u.second == berth[0].y)
 						{
 							found = true;
-							pair<int, int> now = u, tmp = { 0, 0 };
+							MyPair now = u, tmp = { 0, 0 };
 							while (tmp.first != cur_x || tmp.second != cur_y)
 							{
 								tmp = pre[now.first][now.second];
@@ -167,7 +150,7 @@ namespace my_alg {
 		else
 		{
 			//继续走就是了
-			pair<int, int> now = { cur_x, cur_y };
+			MyPair now = { cur_x, cur_y };
 			for (int i = 0; i < 4; i++)
 			{
 				if (now + dx_dy[i] == nxt[cur_x][cur_y])
