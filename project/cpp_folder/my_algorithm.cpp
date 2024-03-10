@@ -115,6 +115,7 @@ namespace my_alg {
 			}
 			else    //当前位置是货物点
 			{
+				goods_map[cur_x][cur_y].first = 0;
 				cout << "get 0" << endl;	//拿货物
 				robot[0].target_x = berth[0].x;
 				robot[0].target_y = berth[0].y;
@@ -135,7 +136,7 @@ namespace my_alg {
 					{
 						pair<int, int> u = q.front();
 						q.pop();
-						if (u.first == berth[0].x && berth[0].y)
+						if (u.first == berth[0].x && u.second == berth[0].y)
 						{
 							found = true;
 							pair<int, int> now = u, tmp = { 0, 0 };
@@ -195,9 +196,13 @@ namespace my_alg {
 			}
 			else
 			{
-				if (boat[0].num)
+				if (boat[0].num > 0)
 				{
 					//船转变为移动中，现在在0，前往-1
+					boat[0].num -= berth[0].loading_speed;
+				}
+				else
+				{
 					cout << "go 0" << endl;
 					boat[0].num = 0;
 				}
