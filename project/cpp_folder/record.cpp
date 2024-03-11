@@ -21,66 +21,113 @@ Robot::Robot(int startX, int startY) {
 	y = startY;
 }
 
+void Robot::find_goods()	//找货物
+{
+	priority_queue<MyPair> choices;	//value, time
+	int cnt = 0;
+	memset(pre, 0, sizeof(pre));
+	memset(visited, false, sizeof(visited));
+	memset(nxt, 0, sizeof(nxt));
+	visited[x][y] = true;
+	queue<MyPair> q;
+	q.push({ x, y });
+	bool found = false;
+	int step = 0;
+	while (cnt < 10 && !q.empty())
+	{
+		int q_size = q.size();
+		for (int j = 1; j <= q_size; j++)
+		{
+			MyPair u = q.front();
+			q.pop();
+			if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step)
+			{
+				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step, robot_id, u));	
+				//放入Search_Policy类的优先队列中，利用启发式来决定去哪
+				cnt += 1;
+			}
+
+			for (int i = 0; i < 4; i++)
+			{
+				MyPair tmp = u + dx_dy[i];
+				if (check_valid(tmp.first, tmp.second) && (!visited[tmp.first][tmp.second]))
+				{
+					visited[tmp.first][tmp.second] = true;
+					pre[tmp.first][tmp.second] = u;
+					q.push(tmp);
+				}
+			}
+		}
+		step++;
+	}
+	cerr << target_x << " " << target_y << endl;
+}
+
+void Robot::find_berth() //找泊位
+{
+	target_x = berth[0].x;
+	target_y = berth[0].y;
+	/*
+	不知道该放哪，先这么放着
+	*/
+	find_road();
+}
+
+void Robot::find_road()	//给定target下去找路
+{
+	memset(pre, 0, sizeof(pre));
+	memset(visited, false, sizeof(visited));
+	memset(nxt, 0, sizeof(nxt));
+	visited[x][y] = true;
+	queue<MyPair> q;
+	q.push({ x, y });
+	bool found = false;
+	int step = 0;
+	MyPair target = { target_x, target_y };
+	while (!found && !q.empty())
+	{
+		int q_size = q.size();
+		for (int j = 1; j <= q_size; j++)
+		{
+			MyPair u = q.front();
+			q.pop();
+			if (u == target)
+			{
+				found = true;
+				MyPair now = u, tmp = { 0, 0 };
+				while (tmp.first != x || tmp.second != y)
+				{
+					tmp = pre[now.first][now.second];
+					nxt[tmp.first][tmp.second] = now;
+					now = tmp;
+				}
+				break;
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				MyPair tmp = u + dx_dy[i];
+				if (check_valid(tmp.first, tmp.second) && (!visited[tmp.first][tmp.second]))
+				{
+					visited[tmp.first][tmp.second] = true;
+					pre[tmp.first][tmp.second] = u;
+					q.push(tmp);
+				}
+			}
+		}
+		step++;
+	}
+}
 void Robot::robot_control()
 {
-	if (id < 10)
-	{
-		return;
-	}
 	if (target_x == -1)
 	{
 		//定个目标地，货物地
-		memset(pre, 0, sizeof(pre));
-		memset(visited, false, sizeof(visited));
-		memset(nxt, 0, sizeof(nxt));
-		visited[x][y] = true;
-		queue<MyPair> q;
-		q.push({ x, y });
-		bool found = false;
-		int step = 0;
-		while (!found && !q.empty())
-		{
-			int q_size = q.size();
-			for (int j = 1; j <= q_size; j++)
-			{
-				MyPair u = q.front();
-				q.pop();
-				if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step)
-				{
-					goods_map[u.first][u.second].first = 0;
-					found = true;
-					target_x = u.first;
-					target_y = u.second;
-					MyPair now = u, tmp = { 0, 0 };
-					while (tmp.first != x || tmp.second != y)
-					{
-						tmp = pre[now.first][now.second];
-						cerr << tmp;
-						nxt[tmp.first][tmp.second] = now;
-						now = tmp;
-					}
-					break;
-				}
-
-				for (int i = 0; i < 4; i++)
-				{
-					MyPair tmp = u + dx_dy[i];
-					if (check_valid(tmp.first, tmp.second) && (!visited[tmp.first][tmp.second]))
-					{
-						visited[tmp.first][tmp.second] = true;
-						pre[tmp.first][tmp.second] = u;
-						q.push(tmp);
-					}
-				}
-			}
-			step++;
-		}
-		cerr << target_x << " " << target_y << endl;
+		find_goods();
 	}
 	else if (target_x == x && target_y == y)
 	{
 		//修改目标地
-		if (target_x == berth[0].x && target_y == berth[0].y)	//当前位置是泊位
+		if (goods)	//身上有货物，所以当前位置是泊位
 		{
 			cout << "pull " << robot_id << endl;
 			boat[0].num += 1;
@@ -90,52 +137,7 @@ void Robot::robot_control()
 		else    //当前位置是货物点
 		{
 			cout << "get " << robot_id << endl;	//拿货物
-			target_x = berth[0].x;
-			target_y = berth[0].y;
-			/*
-			不知道该放哪，先这么放着
-			*/
-			memset(pre, 0, sizeof(pre));
-			memset(visited, false, sizeof(visited));		
-			memset(nxt, 0, sizeof(nxt));
-			visited[x][y] = true;
-			queue<MyPair> q;
-			q.push({ x, y });
-			bool found = false;
-			int step = 0;
-			while (!found && !q.empty())
-			{
-				int q_size = q.size();
-				for (int j = 1; j <= q_size; j++)
-				{
-					MyPair u = q.front();
-					q.pop();
-					if (u.first == berth[0].x && u.second == berth[0].y)
-					{
-						found = true;
-						MyPair now = u, tmp = { 0, 0 };
-						while (tmp.first != x || tmp.second != y)
-						{
-							tmp = pre[now.first][now.second];
-							cerr << tmp;
-							nxt[tmp.first][tmp.second] = now;
-							now = tmp;
-						}
-						break;
-					}
-					for (int i = 0; i < 4; i++)
-					{
-						MyPair tmp = u + dx_dy[i];
-						if (check_valid(tmp.first, tmp.second) && (!visited[tmp.first][tmp.second]))
-						{
-							visited[tmp.first][tmp.second] = true;
-							pre[tmp.first][tmp.second] = u;
-							q.push(tmp);
-						}
-					}
-				}
-				step++;
-			}
+			find_berth();
 		}
 	}
 	else
@@ -154,4 +156,8 @@ void Robot::robot_control()
 	}
 }
 
+void boat_control()
+{
+
+}
 

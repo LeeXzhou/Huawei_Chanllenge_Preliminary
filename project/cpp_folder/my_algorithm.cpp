@@ -7,162 +7,6 @@ namespace my_alg {
 	{
 		return;
 	}
-	bool check_robot(int x, int y)//判断一个位置是否可以让机器人站（合法且不是障碍物或者海）
-	{
-		if (x < 200 && x >= 0 && y < 200 && y >= 0 && ch[x][y] != '*' && ch[x][y] != '#')
-		{
-			return true;
-		}
-		return false;
-	}
-	void find_road(int x, int y)
-	{
-		if (x != -1)	//找泊位
-		{
-
-		}
-		else    //找货物
-		{
-
-		}
-	}
-	void robot_control()
-	{
-		cerr << robot[0].target_x << " " << robot[0].target_y << " " << robot[0].x << " " << robot[0].y << endl;
-		if (id < 10)
-		{
-			return;
-		}
-		int cur_x = robot[0].x, cur_y = robot[0].y;
-		
-		if (robot[0].target_x == -1)
-		{
-			//定个目标地，货物地
-			memset(pre, 0, sizeof(pre));
-			int fx[4] = { 1,-1,0,0 };
-			int fy[4] = { 0,0,-1,1 };
-			memset(visited, false, sizeof(visited));
-			memset(nxt, 0, sizeof(nxt));
-			visited[cur_x][cur_y] = true;
-			queue<MyPair> q;
-			q.push({ cur_x, cur_y });
-			bool found = false;
-			int step = 0;
-			while (!found && !q.empty())
-			{
-				int q_size = q.size();
-				for (int j = 1; j <= q_size; j++)
-				{
-					MyPair u = q.front();
-					q.pop();
-					if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step)
-					{
-						found = true;
-						robot[0].target_x = u.first;
-						robot[0].target_y = u.second;
-						MyPair now = u, tmp = { 0, 0 };
-						while (tmp.first != cur_x || tmp.second != cur_y)
-						{
-							tmp = pre[now.first][now.second];
-							cerr << tmp;
-							nxt[tmp.first][tmp.second] = now;
-							now = tmp;
-						}
-						break;
-					}
-
-					for (int i = 0; i < 4; i++)
-					{
-						int temp_x = u.first + fx[i], temp_y = u.second + fy[i];
-						if (check_robot(temp_x, temp_y) && (!visited[temp_x][temp_y]))
-						{
-							visited[temp_x][temp_y] = true;
-							pre[temp_x][temp_y] = u;
-							q.push({ temp_x, temp_y });
-						}
-					}
-				}
-				step++;
-			}
-			cerr << robot[0].target_x << " " << robot[0].target_y << endl;
-		}
-		else if (robot[0].target_x == cur_x && robot[0].target_y == cur_y)
-		{
-			//修改目标地
-			if (robot[0].target_x == berth[0].x && robot[0].target_y == berth[0].y)	//当前位置是泊位
-			{
-				cout << "pull 0" << endl;
-				boat[0].num += 1;
-				robot[0].target_x = -1;
-				robot[0].target_y = -1;
-			}
-			else    //当前位置是货物点
-			{
-				goods_map[cur_x][cur_y].first = 0;
-				cout << "get 0" << endl;	//拿货物
-				robot[0].target_x = berth[0].x;
-				robot[0].target_y = berth[0].y;
-				memset(pre, 0, sizeof(pre));
-				int fx[4] = { 1,-1,0,0 };
-				int fy[4] = { 0,0,-1,1 };
-				memset(visited, false, sizeof(visited));
-				visited[cur_x][cur_y] = true;
-				memset(nxt, 0, sizeof(nxt));
-				queue<MyPair> q;
-				q.push({ cur_x, cur_y });
-				bool found = false;
-				int step = 0;
-				while (!found && !q.empty())
-				{
-					int q_size = q.size();
-					for (int j = 1; j <= q_size; j++)
-					{
-						MyPair u = q.front();
-						q.pop();
-						if (u.first == berth[0].x && u.second == berth[0].y)
-						{
-							found = true;
-							MyPair now = u, tmp = { 0, 0 };
-							while (tmp.first != cur_x || tmp.second != cur_y)
-							{
-								tmp = pre[now.first][now.second];
-								cerr << tmp;
-								nxt[tmp.first][tmp.second] = now;
-								now = tmp;
-							}
-							break;
-						}
-						for (int i = 0; i < 4; i++)
-						{
-							int temp_x = u.first + fx[i], temp_y = u.second + fy[i];
-							if (check_robot(temp_x, temp_y) && (!visited[temp_x][temp_y]))
-							{
-								visited[temp_x][temp_y] = true;
-								pre[temp_x][temp_y] = u;
-								q.push({ temp_x, temp_y });
-							}
-						}
-					}
-					step++;
-				}
-			}
-		}
-		else
-		{
-			//继续走就是了
-			MyPair now = { cur_x, cur_y };
-			for (int i = 0; i < 4; i++)
-			{
-				if (now + dx_dy[i] == nxt[cur_x][cur_y])
-				{
-					cout << "move 0 " << i << endl;
-					cerr << now << i << endl;
-					break;
-				}
-			}
-
-		}
-	}
 	void boat_control()
 	{
 		cerr << boat[0].status << " " << boat[0].pos << " " << boat[0].num << endl;
@@ -199,11 +43,28 @@ namespace my_alg {
 	}
 	void test_player0()
 	{
-		for (int i = 0; i < 10; i++)
-		{
-			robot[i].robot_control();
-		}
+		robot[0].robot_control();
+		cerr << robot[0].target_x << robot[0].target_y;
 		boat_control();
+		if (!Search_Policy::policy.empty())
+		{
+			unique_ptr<MyPair[]> result(Search_Policy::choose());
+			for (int i = 0; i < 10; i++)
+			{
+				if (result[i] != make_pair(0, 0))
+				{
+					robot[i].target_x = result[i].first;
+					robot[i].target_y = result[i].second;
+					MyPair now = result[i], tmp = { 0, 0 };
+					while (tmp.first != robot[i].x || tmp.second != robot[i].y)
+					{
+						tmp = robot[i].pre[now.first][now.second];
+						robot[i].nxt[tmp.first][tmp.second] = now;
+						now = tmp;
+					}
+				}
+			}
+		}		
 	}
 }
 

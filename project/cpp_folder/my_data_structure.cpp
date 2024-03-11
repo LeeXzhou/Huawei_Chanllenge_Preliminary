@@ -19,3 +19,13 @@ std::ostream& operator<<(std::ostream& os, const MyPair& p) {
     os << "(" << p.first << ", " << p.second << ")";
     return os;
 }
+
+Plan::Plan(int v, int t, int i, MyPair g)
+{
+    value = v, time = t, robot_id = i, target = g;
+}
+
+bool Plan::operator < (const Plan& tmp) const
+{
+    return value * tmp.time < time * tmp.value;
+}

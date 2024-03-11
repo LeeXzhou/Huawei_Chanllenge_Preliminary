@@ -6,7 +6,7 @@ Robot robot[robot_num + 10];
 Boat boat[10];
 int money, boat_capacity, id;
 char ch[N][N];
-pair<int, int> goods_map[N][N];
+MyPair goods_map[N][N];
 short dis[205][205][10];	//-1表示不可达
 
 // 求出每个点到10个港口的最短距离
@@ -23,7 +23,7 @@ void init_dis() {
 	*/
 	int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
     	memset(dis, -1, sizeof(dis));
-	queue<pair<int, int> > q;
+	queue<MyPair > q;
 
 	auto check_boundary = [&](int x, int y)->bool {
 		return x < 0 || x >= n || y < 0 || y >= n || ch[x][y] == '*' || ch[x][y] == '#';
@@ -31,7 +31,7 @@ void init_dis() {
 
     auto cal_dis = [&](int id)->void {
         while(q.size()) {
-            pair<int, int> tp = q.front(); q.pop();
+            MyPair tp = q.front(); q.pop();
             int x = tp.first, y = tp.second;
             for(int i = 0; i < 4; i++) {
                 int _x = x + dx[i], _y = y + dy[i];
