@@ -7,6 +7,52 @@ namespace my_alg {
 	{
 		return;
 	}
+	void init_dis()
+	{
+		memset(dis, -1, sizeof(dis));
+		unique_ptr<unique_ptr<unique_ptr<bool[]>[]>[]> vis(new unique_ptr<unique_ptr<bool[]>[]>[205]);
+		for (int i = 0; i < 205; ++i)
+		{
+			vis[i].reset(new std::unique_ptr<bool[]>[205]);
+			for (int j = 0; j < 205; ++j)
+			{
+				vis[i][j].reset(new bool[10]);
+				for (int k = 0; k < 10; ++k)
+				{
+					vis[i][j][k] = false;
+				}
+			}
+		}
+		queue<MyPair> q;
+		for (int i = 0; i < berth_num; i++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				for (int y = 0; y < 4; y++)
+				{
+					int _x = berth[i].x + x, _y = berth[i].y + y;
+					q.push({ _x, _y });
+					dis[_x][_y][i] = 0;
+					vis[_x][_y][i] = true;
+				}
+			}
+			while (!q.empty())
+			{
+				MyPair tmp = q.front();
+				q.pop();
+				for (int j = 0; j < 4; j++)
+				{
+					MyPair cur = tmp + dx_dy[j];
+					if (check_valid(cur.first, cur.second) && !vis[cur.first][cur.second][i])
+					{
+						vis[cur.first][cur.second][i] = true;
+						dis[cur.first][cur.second][i] = dis[tmp.first][tmp.second][i] + 1;
+						q.push(cur);
+					}
+				}
+			}
+		}
+	}
 	void boat_control()
 	{
 		cerr << boat[0].status << " " << boat[0].pos << " " << boat[0].num << endl;
@@ -44,7 +90,7 @@ namespace my_alg {
 	void test_player0()
 	{
 		robot[0].robot_control();
-		cerr << robot[0].target_x << robot[0].target_y;
+		cerr << "OK!!!" << endl;
 		boat_control();
 		if (!Search_Policy::policy.empty())
 		{
@@ -64,7 +110,7 @@ namespace my_alg {
 					}
 				}
 			}
-		}		
+		}
 	}
 }
 

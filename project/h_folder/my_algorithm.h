@@ -5,7 +5,7 @@ using namespace std;
 
 namespace my_alg {
 	void BFS();
-	//void init_dis(); // 求出每个点到10个港口的最短距离
+	void init_dis(); // 求出每个点到10个港口的最短距离
 	void test_player0();
 	void boat_control();
 }

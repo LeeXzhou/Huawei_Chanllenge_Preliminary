@@ -8,56 +8,6 @@ int money, boat_capacity, id;
 char ch[N][N];
 MyPair goods_map[N][N];
 short dis[205][205][10];	//-1表示不可达
-
-// 求出每个点到10个港口的最短距离
-void init_dis() {
-	bool vis[205][205][10];
-	/*
-	unique_ptr<unique_ptr<unique_ptr<bool[]>[]>[]> vis(new unique_ptr<unique_ptr<bool[]>[]>[205]);
-	for (int i = 0; i < 205; ++i) {
-		vis[i].reset(new std::unique_ptr<bool[]>[205]);
-		for (int j = 0; j < 205; ++j) {
-			vis[i][j].reset(new bool[10]);
-		}
-	}
-	*/
-	int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
-    	memset(dis, -1, sizeof(dis));
-	queue<MyPair > q;
-
-	auto check_boundary = [&](int x, int y)->bool {
-		return x < 0 || x >= n || y < 0 || y >= n || ch[x][y] == '*' || ch[x][y] == '#';
-	};
-
-    auto cal_dis = [&](int id)->void {
-        while(q.size()) {
-            MyPair tp = q.front(); q.pop();
-            int x = tp.first, y = tp.second;
-            for(int i = 0; i < 4; i++) {
-                int _x = x + dx[i], _y = y + dy[i];
-                if(vis[_x][_y][id] || check_boundary(_x, _y)) 
-                    continue;
-                vis[_x][_y][id] = 1;
-                dis[_x][_y][id] = dis[x][y][id] + 1;
-                q.push({_x, _y});
-            }
-        }
-    };
-
-	// 可优化：港口的半岛形态可以只BFS一侧
-    for(int i = 0; i < berth_num; i++) {
-        for(int x = 0; x < 4; x++) {
-            for(int y = 0; y < 4; y++) {
-                int _x = berth[i].x + x, _y = berth[i].y + y;
-                q.emplace(_x, _y);
-                dis[_x][_y][id] = 0;
-                vis[_x][_y][id] = 1;
-            }
-	}
-        cal_dis(i);
-    }
-
-}
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -73,9 +23,7 @@ void Init()
 	cin >> boat_capacity;
 	char okk[100];	//不知道干嘛的
 	cin >> okk;
-
-	init_dis();
-	
+	my_alg::init_dis();
 	cout << "OK" << endl;
 	fflush(stdout);
 }
