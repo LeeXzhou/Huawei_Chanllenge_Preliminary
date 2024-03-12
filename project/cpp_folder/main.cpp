@@ -21,6 +21,14 @@ void Init()
 		cin >> berth[id].x >> berth[id].y >> berth[id].transport_time >> berth[id].loading_speed;
 	}
 	cin >> boat_capacity;
+	for (int i = 0; i < robot_num; i++)
+	{
+		robot[i].robot_id = i;
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		boat[i].boat_id = i;
+	}
 	char okk[100];	//不知道干嘛的
 	cin >> okk;
 	my_alg::init_dis();
@@ -43,12 +51,10 @@ int Input()
 	{
 		int sts;
 		cin >> robot[i].goods >> robot[i].x >> robot[i].y >> sts;
-		robot[i].robot_id = i;
 	}
 	for (int i = 0; i < 5; i++)
 	{
 		cin >> boat[i].status >> boat[i].pos;
-		boat[i].boat_id = i;
 	}
 	char okk[100];
 	cin >> okk;

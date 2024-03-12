@@ -42,7 +42,7 @@ void Robot::find_goods()	//找货物
 			q.pop();
 			if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step)
 			{
-				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step, robot_id, u));	
+				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step, robot_id, u));
 				//放入Search_Policy类的优先队列中，利用启发式来决定去哪
 				cnt += 1;
 			}
@@ -65,8 +65,8 @@ void Robot::find_goods()	//找货物
 
 void Robot::find_berth() //找泊位
 {
-	target_x = berth[0].x;
-	target_y = berth[0].y;
+	target_x = berth[robot_id / 2].x;
+	target_y = berth[robot_id / 2].y;
 	/*
 	不知道该放哪，先这么放着
 	*/
@@ -130,7 +130,7 @@ void Robot::robot_control()
 		if (goods)	//身上有货物，所以当前位置是泊位
 		{
 			cout << "pull " << robot_id << endl;
-			berth[0].num += 1;
+			berth[robot_id / 2].num += 1;
 			target_x = -1;
 			target_y = -1;
 		}
@@ -158,34 +158,34 @@ void Robot::robot_control()
 
 void Boat::boat_control()
 {
-	if (boat[boat_id].status == 0) //正在移动中
+	cerr << "I am " << boat_id << " " << status << " " << pos << endl;
+	if (status == 0) //正在移动中
 	{
 
 	}
-	else if (boat[boat_id].status == 1)
+	else if (status == 1)
 	{
-		if (boat[boat_id].pos == -1)
+		if (pos == -1)
 		{
 			//现在在-1，前往0，船转变为移动中
-			boat[boat_id].num = 0;
-			cout << "ship 0 0" << endl;
+			num = 0;
+			cout << "ship " << boat_id << " " << boat_id << endl; //先船后泊位
 		}
 		else
 		{
-			if (berth[boat[boat_id].pos].num > 0 && boat[boat_id].num < boat_capacity)
+			if (berth[pos].num > 0 && num < boat_capacity)
 			{
 				//船转变为移动中，现在在0，前往-1
-				int add = min(berth[boat_id].loading_speed, boat_capacity - boat[boat_id].num);
-				boat[boat_id].num += add;
-				berth[boat[boat_id].pos].num -= add;
+				int add = min(berth[boat_id].loading_speed, min(boat_capacity - num, berth[boat_id].num));
+				num += add;
+				berth[pos].num -= add;
 			}
 			else
 			{
-				cout << "go 0" << endl;
+				cout << "go " << boat_id << endl;
 			}
 		}
-		boat[boat_id].status = 0;
-		boat[boat_id].status = 0;
+		status = 0;
 	}
 	else
 	{

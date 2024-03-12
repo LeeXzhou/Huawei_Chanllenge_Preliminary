@@ -91,8 +91,11 @@ namespace my_alg {
 	void test_player0()
 	{
 		robot[0].robot_control();
+		robot[9].robot_control();
+		cerr << berth[0].num << " " << berth[4].num << endl;
 		cerr << "OK!!!" << endl;
 		boat[0].boat_control();
+		boat[4].boat_control();
 		if (!Search_Policy::policy.empty())
 		{
 			unique_ptr<MyPair[]> result(Search_Policy::choose());
