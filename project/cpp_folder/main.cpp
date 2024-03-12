@@ -48,6 +48,7 @@ int Input()
 	for (int i = 0; i < 5; i++)
 	{
 		cin >> boat[i].status >> boat[i].pos;
+		boat[i].boat_id = i;
 	}
 	char okk[100];
 	cin >> okk;

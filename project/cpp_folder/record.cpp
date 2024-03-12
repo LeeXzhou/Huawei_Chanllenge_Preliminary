@@ -1,6 +1,6 @@
 #include "../h_folder/record.h"
 using namespace std;
-bool check_valid(int x, int y)
+bool check_valid(const int& x, const int& y)
 {
 	if (x < 200 && x >= 0 && y < 200 && y >= 0 && ch[x][y] != '*' && ch[x][y] != '#')
 	{
@@ -130,7 +130,7 @@ void Robot::robot_control()
 		if (goods)	//身上有货物，所以当前位置是泊位
 		{
 			cout << "pull " << robot_id << endl;
-			boat[0].num += 1;
+			berth[0].num += 1;
 			target_x = -1;
 			target_y = -1;
 		}
@@ -156,8 +156,40 @@ void Robot::robot_control()
 	}
 }
 
-void boat_control()
+void Boat::boat_control()
 {
+	if (boat[boat_id].status == 0) //正在移动中
+	{
 
+	}
+	else if (boat[boat_id].status == 1)
+	{
+		if (boat[boat_id].pos == -1)
+		{
+			//现在在-1，前往0，船转变为移动中
+			boat[boat_id].num = 0;
+			cout << "ship 0 0" << endl;
+		}
+		else
+		{
+			if (berth[boat[boat_id].pos].num > 0 && berth[boat_id].num < boat_capacity)
+			{
+				//船转变为移动中，现在在0，前往-1
+				int add = min(berth[boat_id].loading_speed, boat_capacity - berth[boat_id].num);
+				boat[boat_id].num += add;
+				berth[boat[boat_id].pos].num -= add;
+			}
+			else
+			{
+				cout << "go 0" << endl;
+			}
+		}
+		boat[boat_id].status = 0;
+		boat[boat_id].status = 0;
+	}
+	else
+	{
+		//泊位外等待状态，暂时不考虑
+	}
 }
 

@@ -55,7 +55,6 @@ namespace my_alg {
 	}
 	void boat_control()
 	{
-		cerr << boat[0].status << " " << boat[0].pos << " " << boat[0].num << endl;
 		if (boat[0].status == 0) //正在移动中
 		{
 
@@ -65,19 +64,21 @@ namespace my_alg {
 			if (boat[0].pos == -1)
 			{
 				//现在在-1，前往0，船转变为移动中
+				boat[0].num = 0;
 				cout << "ship 0 0" << endl;
 			}
 			else
 			{
-				if (boat[0].num > 0)
+				if (berth[boat[0].pos].num > 0)
 				{
 					//船转变为移动中，现在在0，前往-1
-					boat[0].num -= berth[0].loading_speed;
+					int add = max(berth[0].loading_speed, berth[0].num);
+					boat[0].num += add;
+					berth[boat[0].pos].num -= add;
 				}
 				else
 				{
 					cout << "go 0" << endl;
-					boat[0].num = 0;
 				}
 			}
 			boat[0].status = 0;
@@ -91,7 +92,7 @@ namespace my_alg {
 	{
 		robot[0].robot_control();
 		cerr << "OK!!!" << endl;
-		boat_control();
+		boat[0].boat_control();
 		if (!Search_Policy::policy.empty())
 		{
 			unique_ptr<MyPair[]> result(Search_Policy::choose());
