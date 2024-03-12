@@ -3,6 +3,7 @@
 #include <utility>
 #include <iostream>
 #include <memory>
+#include <stack>
 using namespace std;
 using MyPair = std::pair<int, int>;
 

@@ -51,6 +51,7 @@ int Input()
 	{
 		int sts;
 		cin >> robot[i].goods >> robot[i].x >> robot[i].y >> sts;
+		robot[i].move_or_not = false;
 	}
 	for (int i = 0; i < 5; i++)
 	{

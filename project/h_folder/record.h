@@ -6,20 +6,24 @@
 #include "search_policy.h"
 using namespace std;
 bool check_valid(const int& x, const int& y);
+bool check_valid(const MyPair& x);
 class Robot {
 public:
 	int x = -1, y = -1, goods = -1;
 	int status = -1;
 	int target_x = -1, target_y = -1;	
-	MyPair pre[205][205], nxt[205][205];
-	bool visited[205][205] = { false };
+	MyPair pre[200][200], nxt[200][200];
+	bool visited[200][200] = { false };
 	int robot_id = 0;
+	bool move_or_not = false;
 	Robot() { };
 	Robot(int startX, int startY);
 	void robot_control();
 	void find_goods();
 	void find_berth();
 	void find_road();
+	void clash_solve();
+	bool robot_dfs(const int& move_num, stack<MyPair>move_order);
 };
 
 class Berth {
