@@ -172,10 +172,10 @@ void Boat::boat_control()
 		}
 		else
 		{
-			if (berth[boat[boat_id].pos].num > 0 && berth[boat_id].num < boat_capacity)
+			if (berth[boat[boat_id].pos].num > 0 && boat[boat_id].num < boat_capacity)
 			{
 				//船转变为移动中，现在在0，前往-1
-				int add = min(berth[boat_id].loading_speed, boat_capacity - berth[boat_id].num);
+				int add = min(berth[boat_id].loading_speed, boat_capacity - boat[boat_id].num);
 				boat[boat_id].num += add;
 				berth[boat[boat_id].pos].num -= add;
 			}
