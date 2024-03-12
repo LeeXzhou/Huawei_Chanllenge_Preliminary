@@ -7,6 +7,7 @@ namespace my_alg {
 	{
 		return;
 	}
+<<<<<<< Updated upstream
 	void init_dis()
 	{
 		memset(dis, -1, sizeof(dis));
@@ -54,33 +55,36 @@ namespace my_alg {
 		}
 	}
 	void boat_control()
+=======
+	void boat_control(int boat_num)
+>>>>>>> Stashed changes
 	{
-		cerr << boat[0].status << " " << boat[0].pos << " " << boat[0].num << endl;
-		if (boat[0].status == 0) //正在移动中
+		//cerr << boat[0].status << " " << boat[0].pos << " " << boat[0].num << endl;
+		if (boat[boat_num].status == 0) //正在移动中
 		{
 
 		}
-		else if (boat[0].status == 1)
+		else if (boat[boat_num].status == 1)
 		{
-			if (boat[0].pos == -1)
+			if (boat[boat_num].pos == -1)
 			{
 				//现在在-1，前往0，船转变为移动中
-				cout << "ship 0 0" << endl;
+				cout << "ship " <<boat_num<<" "<<boat_num<< endl;
 			}
 			else
 			{
-				if (boat[0].num > 0)
+				if (boat[boat_num].num > 0)
 				{
 					//船转变为移动中，现在在0，前往-1
-					boat[0].num -= berth[0].loading_speed;
+					boat[boat_num].num -= berth[0].loading_speed;
 				}
 				else
 				{
-					cout << "go 0" << endl;
-					boat[0].num = 0;
+					cout << "go " <<boat_num<< endl;
+					boat[boat_num].num = 0;
 				}
 			}
-			boat[0].status = 0;
+			boat[boat_num].status = 0;
 		}
 		else
 		{
@@ -89,28 +93,46 @@ namespace my_alg {
 	}
 	void test_player0()
 	{
+<<<<<<< Updated upstream
 		robot[0].robot_control();
 		cerr << "OK!!!" << endl;
 		boat_control();
 		if (!Search_Policy::policy.empty())
+=======
+		
+		for (int j = 0; j < 10; j++)
+>>>>>>> Stashed changes
 		{
-			unique_ptr<MyPair[]> result(Search_Policy::choose());
-			for (int i = 0; i < 10; i++)
+			robot[j].robot_control();
+			//cerr << robot[j].target_x << robot[j].target_y;
+			for (int uu = 0; uu < 5; uu++)
 			{
-				if (result[i] != make_pair(0, 0))
+				boat_control(uu);
+			}
+			if (!Search_Policy::policy.empty())
+			{
+				unique_ptr<MyPair[]> result(Search_Policy::choose());
+				for (int i = 0; i < 10; i++)
 				{
-					robot[i].target_x = result[i].first;
-					robot[i].target_y = result[i].second;
-					MyPair now = result[i], tmp = { 0, 0 };
-					while (tmp.first != robot[i].x || tmp.second != robot[i].y)
+					if (result[i] != make_pair(0, 0))
 					{
-						tmp = robot[i].pre[now.first][now.second];
-						robot[i].nxt[tmp.first][tmp.second] = now;
-						now = tmp;
+						robot[i].target_x = result[i].first;
+						robot[i].target_y = result[i].second;
+						MyPair now = result[i], tmp = { 0, 0 };
+						while (tmp.first != robot[i].x || tmp.second != robot[i].y)
+						{
+							tmp = robot[i].pre[now.first][now.second];
+							robot[i].nxt[tmp.first][tmp.second] = now;
+							now = tmp;
+						}
 					}
 				}
 			}
 		}
+<<<<<<< Updated upstream
+=======
+		
+>>>>>>> Stashed changes
 	}
 }
 

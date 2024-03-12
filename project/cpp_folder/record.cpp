@@ -8,6 +8,10 @@ bool check_valid(int x, int y)
 	}
 	return false;
 }
+bool check_valid(MyPair x)
+{
+	return check_valid(x.first, x.second);
+}
 
 Berth::Berth(int x, int y, int transport_time, int loading_speed) {
 	this->x = x;
@@ -21,6 +25,152 @@ Robot::Robot(int startX, int startY) {
 	y = startY;
 }
 
+bool Robot::robot_dfs(int move_num, stack<MyPair>move_order)
+{
+	if (robot[move_num].move_or_not)return 0;
+	for (int i = 0; i < 4; i++)
+	{
+		bool robot_clash = false;
+		if(!check_valid(dx_dy[i] + make_pair(robot[move_num].x, robot[move_num].y))){continue;}
+		for (int j = 0; j < 10; j++)
+		{
+			
+			if (move_num == j)continue;
+			if (dx_dy[i] + make_pair(robot[move_num].x, robot[move_num].y) == make_pair(robot[j].x, robot[j].y))
+			{
+				robot_clash = true; break;
+			}
+		}
+		
+		if (robot_clash == false)
+		{
+			move_order.push({ move_num,i });
+			
+			while (!move_order.empty())
+			{
+				MyPair u = move_order.top();
+				move_order.pop();
+				int u_id = u.first;
+				int u_op = u.second;
+				robot[u_id].move_or_not = true;
+				robot[u_id].target_x = -1;
+				robot[u_id].target_y = -1;
+				cerr << u_id << endl;
+				cout << "move " << u_id << " " << u_op << endl;
+				
+				if (myfile.is_open())
+				{
+					myfile <<"cccc" << robot[u_id].x << " " << robot[u_id].y << "move " << u_id << " " << u_op << "\n";
+				}
+				robot[u_id].x += dx_dy[u_op].first;
+				robot[u_id].y += dx_dy[u_op].second;
+				robot[u_id].move_or_not = true;
+
+				
+
+			}
+			return 1;
+		}
+	}
+	int answer = 0;
+	robot[move_num].move_or_not = true;
+	for (int i = 0; i < 4; i++)
+	{
+		if (!check_valid(dx_dy[i] + make_pair(robot[move_num].x, robot[move_num].y)))continue;
+		for (int j = 0; j < 10; j++)
+		{
+			if (dx_dy[i] + make_pair(robot[move_num].x, robot[move_num].y) == make_pair(robot[j].x, robot[j].y))
+			{
+				if (robot[j].move_or_not)continue;
+				move_order.push({ move_num,i });
+				answer = robot_dfs(j, move_order);
+				move_order.pop();
+				if (answer == 1)return 1;
+			}
+		}
+	}
+	robot[move_num].move_or_not = false;
+	return 0;
+}
+
+void Robot::clash_solve()
+{
+	if (move_or_not)return;
+	int flag = 1;
+	for (int i = 0; i < 10; i++)
+	{
+		if (i == robot_id)continue;
+		if (nxt[x][y] == make_pair(robot[i].x, robot[i].y)) { flag = 0; break; }
+	}
+
+	if (flag)//若下一步没有机器人
+	{
+		MyPair now = { x, y };
+		for (int i = 0; i < 4; i++)
+		{
+			if (now + dx_dy[i] == nxt[x][y])
+			{
+				cout << "move " << robot_id << " " << i << endl;
+
+				if (myfile.is_open())
+				{
+					myfile <<"aaaa" << x << " " << y << "move " << robot_id << " " << i << "\n";
+				}
+
+				x = nxt[now.first][now.second].first;
+				y = nxt[now.first][now.second].second;
+				move_or_not = true;
+				
+				
+				break;
+			}
+		}
+		return;
+	}
+	
+	//for (int i = 0; i < robot_id; i++)
+	//{
+	//	if (nxt[x][y] == make_pair(robot[i].x, robot[i].y))return;
+	//}
+	int answer = 0;
+	move_or_not = true;
+	for (int i = 0; i < 10; i++)
+	{
+		if (nxt[x][y] == make_pair(robot[i].x, robot[i].y))
+		{
+			stack<MyPair> move_order;
+			answer = robot_dfs(i, move_order);
+			break;
+		}
+	}
+	if (answer)
+	{
+		MyPair now = { x, y };
+		for (int i = 0; i < 4; i++)
+		{
+			if (now + dx_dy[i] == nxt[x][y])
+			{
+				cout << "move " << robot_id << " " << i << endl;
+
+				if (myfile.is_open())
+				{
+					myfile <<"bbbb" << x << " " << y << "move " << robot_id << " " << i << "\n";
+				}
+
+				x = nxt[now.first][now.second].first;
+				y = nxt[now.first][now.second].second;
+				move_or_not = true;
+				
+				break;
+			}
+		}
+	}
+	else
+	{
+		move_or_not = false;
+	}
+	
+}
 void Robot::find_goods()	//找货物
 {
 	priority_queue<MyPair> choices;	//value, time
@@ -33,7 +183,7 @@ void Robot::find_goods()	//找货物
 	q.push({ x, y });
 	bool found = false;
 	int step = 0;
-	while (cnt < 10 && !q.empty())
+	while (cnt < 1 && !q.empty())
 	{
 		int q_size = q.size();
 		for (int j = 1; j <= q_size; j++)
@@ -60,13 +210,13 @@ void Robot::find_goods()	//找货物
 		}
 		step++;
 	}
-	cerr << target_x << " " << target_y << endl;
+	//cerr << target_x << " " << target_y << endl;
 }
 
 void Robot::find_berth() //找泊位
 {
-	target_x = berth[0].x;
-	target_y = berth[0].y;
+	target_x = berth[robot_id/2].x;
+	target_y = berth[robot_id/2].y;
 	/*
 	不知道该放哪，先这么放着
 	*/
@@ -119,10 +269,17 @@ void Robot::find_road()	//给定target下去找路
 }
 void Robot::robot_control()
 {
+	if (move_or_not)return;
 	if (target_x == -1)
 	{
-		//定个目标地，货物地
-		find_goods();
+		if (goods == false)
+		{
+			find_goods();
+		}
+		else
+		{
+			find_berth();
+		}
 	}
 	else if (target_x == x && target_y == y)
 	{
@@ -143,7 +300,7 @@ void Robot::robot_control()
 	else
 	{
 		//继续走就是了
-		MyPair now = { x, y };
+		/*MyPair now = {x, y};
 		for (int i = 0; i < 4; i++)
 		{
 			if (now + dx_dy[i] == nxt[x][y])
@@ -152,7 +309,9 @@ void Robot::robot_control()
 				cerr << now << i << endl;
 				break;
 			}
-		}
+		}*/
+		
+		clash_solve();
 	}
 }
 

@@ -8,6 +8,61 @@ int money, boat_capacity, id;
 char ch[N][N];
 MyPair goods_map[N][N];
 short dis[205][205][10];	//-1表示不可达
+<<<<<<< Updated upstream
+=======
+
+
+
+// 求出每个点到10个港口的最短距离
+void init_dis() {
+	bool vis[205][205][10];
+	/*
+	unique_ptr<unique_ptr<unique_ptr<bool[]>[]>[]> vis(new unique_ptr<unique_ptr<bool[]>[]>[205]);
+	for (int i = 0; i < 205; ++i) {
+		vis[i].reset(new std::unique_ptr<bool[]>[205]);
+		for (int j = 0; j < 205; ++j) {
+			vis[i][j].reset(new bool[10]);
+		}
+	}
+	*/
+	int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
+    	memset(dis, -1, sizeof(dis));
+	queue<MyPair > q;
+
+	auto check_boundary = [&](int x, int y)->bool {
+		return x < 0 || x >= n || y < 0 || y >= n || ch[x][y] == '*' || ch[x][y] == '#';
+	};
+
+    auto cal_dis = [&](int id)->void {
+        while(q.size()) {
+            MyPair tp = q.front(); q.pop();
+            int x = tp.first, y = tp.second;
+            for(int i = 0; i < 4; i++) {
+                int _x = x + dx[i], _y = y + dy[i];
+                if(vis[_x][_y][id] || check_boundary(_x, _y)) 
+                    continue;
+                vis[_x][_y][id] = 1;
+                dis[_x][_y][id] = dis[x][y][id] + 1;
+                q.push({_x, _y});
+            }
+        }
+    };
+
+	// 可优化：港口的半岛形态可以只BFS一侧
+    for(int i = 0; i < berth_num; i++) {
+        for(int x = 0; x < 4; x++) {
+            for(int y = 0; y < 4; y++) {
+                int _x = berth[i].x + x, _y = berth[i].y + y;
+                q.emplace(_x, _y);
+                dis[_x][_y][id] = 0;
+                vis[_x][_y][id] = 1;
+            }
+	}
+        cal_dis(i);
+    }
+
+}
+>>>>>>> Stashed changes
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -30,6 +85,7 @@ void Init()
 
 int Input()
 {
+
 	cin >> id >> money;
 	int num;
 	cin >> num;
@@ -44,6 +100,7 @@ int Input()
 		int sts;
 		cin >> robot[i].goods >> robot[i].x >> robot[i].y >> sts;
 		robot[i].robot_id = i;
+		robot[i].move_or_not = false;
 	}
 	for (int i = 0; i < 5; i++)
 	{
@@ -53,13 +110,20 @@ int Input()
 	cin >> okk;
 	return id;
 }
-
+ofstream myfile;
 int main()
 {
+	
+	myfile.open("debug3_12.txt");
 	Init();
-	for (int zhen = 1; zhen <= 15000; zhen++)
+	
+	for (int zhen = 0; zhen < 15000; zhen++)
 	{
 		id = Input();
+		if (myfile.is_open())
+		{
+			myfile << zhen << "\n";
+		}
 		my_alg::test_player0();
 		/*
 		cerr << id << "!";
@@ -71,6 +135,7 @@ int main()
 		puts("OK");
 		fflush(stdout);
 	}
+	myfile.close();
 
 	return 0;
 }
