@@ -12,11 +12,11 @@ unique_ptr<MyPair[]> Search_Policy::choose()
 	{
 		Plan tmp = policy.top();
 		policy.pop();
-		if (!visited[tmp.robot_id] && goods_map[tmp.target.first][tmp.target.second].first)
+		if (!visited[tmp.robot_id] && goods_map[tmp.target.first][tmp.target.second].first > 0)
 		{
 			visited[tmp.robot_id] = true;
 			choice[tmp.robot_id] = tmp.target;	
-			goods_map[tmp.target.first][tmp.target.second].first = 0;
+			goods_map[tmp.target.first][tmp.target.second].first = -goods_map[tmp.target.first][tmp.target.second].first;
 		}
 	}
 	return choice;

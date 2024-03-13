@@ -1,9 +1,2 @@
-﻿  main.cpp
-C:\Users\86150\Desktop\leezhou2\Huawei_Chanllenge_Preliminary\project\cpp_folder\main.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-  my_algorithm.cpp
-  my_data_structure.cpp
-  record.cpp
-  search_policy.cpp
-  正在生成代码...
-  LINK : 没有找到 C:\Users\86150\Desktop\leezhou2\Huawei_Chanllenge_Preliminary\project\Debug\project.exe 或上一个增量链接没有生成它；正在执行完全链接
+﻿  record.cpp
   project.vcxproj -> C:\Users\86150\Desktop\leezhou2\Huawei_Chanllenge_Preliminary\project\Debug\project.exe

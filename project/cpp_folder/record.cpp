@@ -45,7 +45,7 @@ void Robot::find_goods()	//找货物
 		{
 			MyPair u = q.front();
 			q.pop();
-			if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step + 3)	//给一点容错
+			if (goods_map[u.first][u.second].first >0&& goods_map[u.first][u.second].second - id > step + 2)	//给一点容错
 			{
 				short good_to_berth_dis = 30000;
 				for (int i = 0; i < 10; i++)
@@ -275,6 +275,10 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				robot[u_id].move_or_not = true;
 				robot[u_id].target_x = -1;
 				robot[u_id].target_y = -1;
+				if (goods == 0)
+				{
+					goods_map[robot[u_id].target_x][robot[u_id].target_y].first = -goods_map[robot[u_id].target_x][robot[u_id].target_y].first;
+				}
 				cerr << u_id << endl;
 				cout << "move " << u_id << " " << u_op << endl;
 
@@ -282,6 +286,11 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				robot[u_id].x += dx_dy[u_op].first;
 				robot[u_id].y += dx_dy[u_op].second;
 				robot[u_id].move_or_not = true;
+				if(!robot[u_id].goods)robot[u_id].find_goods();
+				else
+				{
+					robot[u_id].find_berth();
+				}
 
 
 
