@@ -12,7 +12,7 @@ unique_ptr<MyPair[]> Search_Policy::choose()
 	{
 		Plan tmp = policy.top();
 		policy.pop();
-		if (!visited[tmp.robot_id])
+		if (!visited[tmp.robot_id] && goods_map[tmp.target.first][tmp.target.second].first)
 		{
 			visited[tmp.robot_id] = true;
 			choice[tmp.robot_id] = tmp.target;	
