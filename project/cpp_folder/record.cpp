@@ -250,13 +250,14 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 	if (robot[move_num].move_or_not)return 0;
 	for (int i = 0; i < 4; i++)
 	{
+		int ran_i = (i + id) % 4;
 		bool robot_clash = false;
-		if (!check_valid(dx_dy[i] + make_pair(robot[move_num].x, robot[move_num].y))) { continue; }
+		if (!check_valid(dx_dy[ran_i] + make_pair(robot[move_num].x, robot[move_num].y))) { continue; }
 		for (int j = 0; j < 10; j++)
 		{
 
 			if (move_num == j)continue;
-			if (dx_dy[i] + make_pair(robot[move_num].x, robot[move_num].y) == make_pair(robot[j].x, robot[j].y))
+			if (dx_dy[ran_i] + make_pair(robot[move_num].x, robot[move_num].y) == make_pair(robot[j].x, robot[j].y))
 			{
 				robot_clash = true; break;
 			}
@@ -264,7 +265,7 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 
 		if (robot_clash == false)
 		{
-			move_order.push({ move_num,i });
+			move_order.push({ move_num,ran_i });
 
 			while (!move_order.empty())
 			{
@@ -273,12 +274,13 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				int u_id = u.first;
 				int u_op = u.second;
 				robot[u_id].move_or_not = true;
-				robot[u_id].target_x = -1;
-				robot[u_id].target_y = -1;
-				if (goods == 0)
+				
+				if (robot[u_id].goods == 0)
 				{
 					goods_map[robot[u_id].target_x][robot[u_id].target_y].first = -goods_map[robot[u_id].target_x][robot[u_id].target_y].first;
 				}
+				robot[u_id].target_x = -1;
+				robot[u_id].target_y = -1;
 				cerr << u_id << endl;
 				cout << "move " << u_id << " " << u_op << endl;
 

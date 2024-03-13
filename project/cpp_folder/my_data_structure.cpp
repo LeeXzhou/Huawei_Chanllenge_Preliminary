@@ -29,3 +29,5 @@ bool Plan::operator < (const Plan& tmp) const
 {
     return value * tmp.time < time * tmp.value;
 }
+// 随机数生成器
+
