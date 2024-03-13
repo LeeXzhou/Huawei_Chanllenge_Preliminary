@@ -45,7 +45,7 @@ void Robot::find_goods()	//找货物
 		{
 			MyPair u = q.front();
 			q.pop();
-			if (goods_map[u.first][u.second].first && goods_map[u.first][u.second].second - id > step + 3)	//给一点容错
+			if (goods_map[u.first][u.second].first > 0 && goods_map[u.first][u.second].second - id > step + 2)	//+2给一点容错
 			{
 				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step, robot_id, u));
 				//放入Search_Policy类的优先队列中，利用启发式来决定去哪
@@ -158,7 +158,7 @@ void Robot::robot_control()
 					return;
 				}
 			}
-			
+
 			find_berth();
 		}
 		else    //身上没有货物，判断当前位置是不是泊位
@@ -246,18 +246,17 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				int u_id = u.first;
 				int u_op = u.second;
 				robot[u_id].move_or_not = true;
-				robot[u_id].target_x = -1;
-				robot[u_id].target_y = -1;
+				if (goods == 0)
+				{
+					goods_map[robot[u_id].target_x][robot[u_id].target_y].first = -goods_map[robot[u_id].target_x][robot[u_id].target_y].first;	//机器人重新选择货物，所以要让货物价值恢复
+				}
+				
 				cerr << u_id << endl;
 				cout << "move " << u_id << " " << u_op << endl;
-
-
+				
 				robot[u_id].x += dx_dy[u_op].first;
 				robot[u_id].y += dx_dy[u_op].second;
 				robot[u_id].move_or_not = true;
-
-
-
 			}
 			return true;
 		}
