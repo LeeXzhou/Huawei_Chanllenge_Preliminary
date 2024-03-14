@@ -39,10 +39,8 @@ MyPair Berth::find_goods_from_berth()
 		{
 			if (goods_map[cur->cur_x][cur->cur_y].first > 0)
 			{
-				for (int i = 0; i < 10; i++)
-				{
-					q.push(Plan(goods_map[cur->cur_x][cur->cur_y].first, dis[cur->cur_x][cur->cur_y][i] + dis[cur->cur_x][cur->cur_y][berth_id], -1, { cur->cur_x,cur->cur_y }));
-				}
+				//需要优化
+				q.push(Plan(goods_map[cur->cur_x][cur->cur_y].first,  + dis[cur->cur_x][cur->cur_y][berth_id], -1, { cur->cur_x,cur->cur_y }));
 			}
 			cur++;
 		}
