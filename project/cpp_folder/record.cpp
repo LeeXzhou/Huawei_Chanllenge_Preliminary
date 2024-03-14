@@ -100,12 +100,14 @@ void Robot::find_berth() //找泊位
 	int min_dis = 30000;
 	for (int i = 0; i < 10; i++)
 	{
+		if (dis[x][y][i] + id > berth[i].close_time)continue;
 		if (dis[x][y][i] < min_dis)
 		{
 			aim_num = i;
 			min_dis = dis[x][y][i];
 		}
 	}
+	if (aim_num == -1)aim_num = 0;
 	target_x = berth[aim_num].x;
 	target_y = berth[aim_num].y;
 	/*
@@ -231,7 +233,20 @@ void Boat::boat_control()
 {
 	if (status == 0) //正在移动中
 	{
-
+		left_time -= 1;
+		if (id >= tail_time&&tail_status==-1)
+		{
+			if (num == 0)//向港口移动就让目标港口打烊
+			{
+				berth[aim_berth].close_time = 15000 - 2 * max_trans_time - second_max_trans- boat_capacity - boat_capacity / berth[aim_berth].loading_speed - 10;
+				berth[aim_berth].close_time = max(berth[aim_berth].close_time, id + berth[aim_berth].transport_time + boat_capacity / berth[aim_berth].loading_speed + 10);
+			}
+			else
+			{
+				//啥也不干
+			}
+		}
+		
 	}
 	else if (status == 1)
 	{
@@ -239,33 +254,83 @@ void Boat::boat_control()
 		{
 			//现在在-1，前往0，船转变为移动中
 			num = 0;
-			int aim_berth = -1;
+			int aim_berth_temp = -1;
 			int temp_goods_num = -1;
 			for (int i = 0; i < 10; i++)
 			{
 				if (berth[i].num > temp_goods_num && berth[i].aimed == false)
 				{
+					if (id >= tail_time)
+					{
+						if (tail_status == -1 || tail_status == 0)//如果目标打烊，不选
+						{
+							if (berth[i].close_time < 15000)continue;
+						}
+						else//如果两波尾杀完成
+						{
+							return;
+						}
+					}
 					temp_goods_num = berth[i].num;
-					aim_berth = i;
+					aim_berth_temp = i;
 				}
 			}
-			berth[aim_berth].aimed = true;
-			cout << "ship " << boat_id << " " << aim_berth << endl; //先船后泊位
+			berth[aim_berth_temp].aimed = true;
+			aim_berth = aim_berth_temp;
+			if (id>tail_time)
+			{
+				if (tail_status == -1)
+				{
+					berth[aim_berth].close_time = 15000 - 2 * max_trans_time - second_max_trans - boat_capacity - boat_capacity / berth[aim_berth].loading_speed - 10;
+					berth[aim_berth].close_time = max(berth[aim_berth].close_time, id + berth[aim_berth].transport_time + boat_capacity / berth[aim_berth].loading_speed + 10);
+				}
+				else
+				{
+					berth[aim_berth].close_time = 15000 - berth[aim_berth].transport_time - 2;
+				}
+				tail_status++;
+			}
+			
+			left_time = berth[aim_berth].transport_time;
+
+			cout << "ship " << boat_id << " " << aim_berth_temp << endl; //先船后泊位
 		}
 		else
 		{
-			if (berth[pos].num > 0 && num < boat_capacity)
+			if (id >= tail_time)//
 			{
-				//船转变为移动中，现在在0，前往-1
-				int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
-				num += add;
-				berth[pos].num -= add;
+				if (id == berth[pos].close_time)//打烊了就走
+				{
+					berth[pos].aimed = false;
+					left_time = berth[aim_berth].transport_time;
+					aim_berth = -1;
+					cout << "go " << boat_id << endl;
+				}
+				else
+				{
+					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
+					num += add;
+					berth[pos].num -= add;
+				}
 			}
 			else
 			{
-				berth[pos].aimed = false;
-				cout << "go " << boat_id << endl;
+				if (berth[pos].num > 0 && num < boat_capacity)
+				{
+					//船转变为移动中，现在在0，前往-1
+					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
+					num += add;
+					berth[pos].num -= add;
+				}
+				else
+				{
+					berth[pos].aimed = false;
+					left_time = berth[aim_berth].transport_time;
+					aim_berth = -1;
+					cout << "go " << boat_id << endl;
+				}
 			}
+			
 		}
 		status = 0;
 	}

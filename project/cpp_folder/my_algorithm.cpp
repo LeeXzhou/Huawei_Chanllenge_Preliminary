@@ -103,10 +103,7 @@ namespace my_alg {
 		{
 			boat[i].boat_control();
 		}
-		for (int i = 0; i < 10; i++)
-		{
-			cerr <<i<<" "<< berth[i].num << endl;
-		}
+		
 		if (!Search_Policy::policy.empty())
 		{
 			unique_ptr<MyPair[]> result(Search_Policy::choose());

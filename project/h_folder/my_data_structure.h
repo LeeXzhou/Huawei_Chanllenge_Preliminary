@@ -7,7 +7,7 @@
 #include<cstring>
 #include <random>
 #include <set>
-
+#include<algorithm>
 using namespace std;
 using MyPair = std::pair<int, int>;
 

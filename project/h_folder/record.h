@@ -4,6 +4,7 @@
 #include "my_data_structure.h"
 #include <cstring>
 #include "search_policy.h"
+
 using namespace std;
 bool check_valid(const int& x, const int& y);
 bool check_valid(const MyPair& x);
@@ -35,6 +36,7 @@ public:
 	int loading_speed = -1;
 	int num = 0;
 	int berth_id = -1;
+	int close_time = 15000;
 	Berth() { };
 	Berth(int x, int y, int transport_time, int loading_speed);
 	MyPair find_goods_from_berth();
@@ -44,11 +46,17 @@ public:
 class Boat {
 public:
 	int num = 0, pos = -1, status = -1, boat_id = -1;
+
+	int tail_status = -1;
+	int aim_berth = -1,left_time=-1;
 	Boat() { };
 	void boat_control();
 };
 extern Berth berth[berth_num + 10];
 extern Robot robot[robot_num + 10];
 extern Boat boat[10];
+extern int tail_time;
+extern int max_trans_time;
+extern int second_max_trans;
 #endif // !record_h
 

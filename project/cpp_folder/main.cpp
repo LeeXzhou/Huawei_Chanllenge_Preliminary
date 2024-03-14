@@ -8,6 +8,9 @@ int money, boat_capacity, id;
 char ch[N][N];
 MyPair goods_map[N][N];
 int dis[205][205][10];	//-1表示不可达
+int tail_time;
+int max_trans_time;
+int second_max_trans;
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -22,6 +25,16 @@ void Init()
 		berth[id].berth_id = id;
 	}
 	cin >> boat_capacity;
+	//尾杀时间
+	int temp_transport_time[10] = { 0 };
+	for (int i = 0; i < 10; i++)
+	{
+		temp_transport_time[i] = berth[i].transport_time;
+	}
+	sort(temp_transport_time, temp_transport_time + 10);
+	tail_time = 15000 - (temp_transport_time[9] + temp_transport_time[8]+boat_capacity) * 2-temp_transport_time[9] - 2 *boat_capacity;
+	max_trans_time = temp_transport_time[9];
+	second_max_trans = temp_transport_time[8];
 	for (int i = 0; i < robot_num; i++)
 	{
 		robot[i].robot_id = i;
