@@ -7,7 +7,7 @@ Boat boat[10];
 int money, boat_capacity, id;
 char ch[N][N];
 MyPair goods_map[N][N];
-short dis[205][205][10];	//-1表示不可达
+int dis[205][205][10];	//-1表示不可达
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -19,6 +19,7 @@ void Init()
 	{
 		cin >> id;
 		cin >> berth[id].x >> berth[id].y >> berth[id].transport_time >> berth[id].loading_speed;
+		berth[id].berth_id = id;
 	}
 	cin >> boat_capacity;
 	for (int i = 0; i < robot_num; i++)
@@ -45,6 +46,13 @@ int Input()
 	{
 		int x, y, val;
 		cin >> x >> y >> val;
+		for (int i = 0; i < 10; i++)
+		{
+			if (dis[x][y][i] != -1)
+			{
+				berth[i].goods_info.insert(Record(id + 1000 - dis[x][y][i], x, y));
+			}
+		}
 		goods_map[x][y] = { val, id + 1000 };
 	}
 	for (int i = 0; i < robot_num; i++)

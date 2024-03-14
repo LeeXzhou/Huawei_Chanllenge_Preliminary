@@ -25,9 +25,32 @@ Plan::Plan(int v, int t, int i, MyPair g)
     value = v, time = t, robot_id = i, target = g;
 }
 
+Record::Record(int t, int x, int y)
+{
+    time = t;
+    cur_x = x;
+    cur_y = y;
+}
+bool Record::operator < (const Record& tmp) const
+{
+    return time < tmp.time;
+}
+
 bool Plan::operator < (const Plan& tmp) const
 {
     return value * tmp.time < time * tmp.value;
+}
+
+int my_abs(const int& a, const int& b)
+{
+    if (a > b)
+    {
+        return a - b;
+    }
+    else
+    {
+        return b - a;
+    }
 }
 // 随机数生成器
 

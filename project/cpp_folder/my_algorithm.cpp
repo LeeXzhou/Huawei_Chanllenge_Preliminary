@@ -26,6 +26,10 @@ namespace my_alg {
 		queue<MyPair> q;
 		for (int i = 0; i < berth_num; i++)
 		{
+			q.push({ berth[i].x, berth[i].y });
+			dis[berth[i].x][berth[i].y][i] = 0;
+			vis[berth[i].x][berth[i].y][i] = true;
+			/*
 			for (int x = 0; x < 4; x++)
 			{
 				for (int y = 0; y < 4; y++)
@@ -36,6 +40,7 @@ namespace my_alg {
 					vis[_x][_y][i] = true;
 				}
 			}
+			*/
 			while (!q.empty())
 			{
 				MyPair tmp = q.front();

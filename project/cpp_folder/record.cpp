@@ -26,9 +26,32 @@ Robot::Robot(int startX, int startY) {
 	y = startY;
 }
 
-void Robot::find_goods()	//找货物
+MyPair Berth::find_goods_from_berth()
 {
-	priority_queue<MyPair> choices;	//value, time
+	priority_queue<Plan> q;
+	for (auto cur = goods_info.begin(); cur != goods_info.end();)
+	{
+		if (cur->time <= id)
+		{
+			cur = goods_info.erase(cur);
+		}
+		else
+		{
+			if (goods_map[cur->cur_x][cur->cur_y].first > 0)
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					q.push(Plan(goods_map[cur->cur_x][cur->cur_y].first, dis[cur->cur_x][cur->cur_y][i] + dis[cur->cur_x][cur->cur_y][berth_id], -1, { cur->cur_x,cur->cur_y }));
+				}
+			}
+			cur++;
+		}
+	}
+	MyPair ret = q.top().target;
+	return ret;
+}
+void Robot::find_goods()	//只有起始和目的地找货物
+{
 	int cnt = 0;
 	memset(pre, 0, sizeof(pre));
 	memset(visited, false, sizeof(visited));
@@ -45,14 +68,14 @@ void Robot::find_goods()	//找货物
 		{
 			MyPair u = q.front();
 			q.pop();
-			if (goods_map[u.first][u.second].first >0&& goods_map[u.first][u.second].second - id > step + 2)	//给一点容错
+			if (goods_map[u.first][u.second].first > 0 && goods_map[u.first][u.second].second - id > step + 2)	//给一点容错
 			{
-				short good_to_berth_dis = 30000;
+				int good_to_berth_dis = 30000;
 				for (int i = 0; i < 10; i++)
 				{
 					good_to_berth_dis = min(good_to_berth_dis, dis[u.first][u.second][i]);
 				}
-				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step+good_to_berth_dis, robot_id, u));
+				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
 				//放入Search_Policy类的优先队列中，利用启发式来决定去哪
 				cnt += 1;
 			}
@@ -76,7 +99,7 @@ void Robot::find_goods()	//找货物
 void Robot::find_berth() //找泊位
 {
 	int aim_num = -1;
-	short min_dis = 30000;
+	int min_dis = 30000;
 	for (int i = 0; i < 10; i++)
 	{
 		if (dis[x][y][i] < min_dis)
@@ -90,10 +113,10 @@ void Robot::find_berth() //找泊位
 	/*
 	不知道该放哪，先这么放着
 	*/
-	find_road();
+	find_road(min_dis);
 }
 
-void Robot::find_road()	//给定target下去找路
+void Robot::find_road(const int& min_dis)	//给定target下去找路
 {
 	memset(pre, 0, sizeof(pre));
 	memset(visited, false, sizeof(visited));
@@ -126,6 +149,10 @@ void Robot::find_road()	//给定target下去找路
 			for (int i = 0; i < 4; i++)
 			{
 				MyPair tmp = u + dx_dy[i];
+				if (my_abs(tmp.first, target_x) + my_abs(tmp.second, target_y) > min_dis + 1)
+				{
+					continue;
+				}
 				if (check_valid(tmp.first, tmp.second) && (!visited[tmp.first][tmp.second]))
 				{
 					visited[tmp.first][tmp.second] = true;
@@ -169,7 +196,10 @@ void Robot::robot_control()
 					target_x = -1;
 					target_y = -1;
 					move_or_not = true;
-					find_goods();
+					MyPair target = berth[i].find_goods_from_berth();
+					target_x = target.first, target_y = target.second;
+					goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+					find_road(dis[target_x][target_y][i]);
 					return;
 				}
 			}
@@ -182,12 +212,14 @@ void Robot::robot_control()
 			{
 				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
 				{
-					find_goods();
+					MyPair target = berth[i].find_goods_from_berth();
+					target_x = target.first, target_y = target.second;
+					goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+					find_road(dis[target_x][target_y][i]);
 					return;
 				}
 			}
 			cout << "get " << robot_id << endl;	//拿货物
-			find_berth();
 		}
 	}
 	else

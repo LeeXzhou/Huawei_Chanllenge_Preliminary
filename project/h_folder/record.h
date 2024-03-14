@@ -21,7 +21,7 @@ public:
 	void robot_control();
 	void find_goods();
 	void find_berth();
-	void find_road();
+	void find_road(const int& min_dis);
 	void clash_solve();
 	bool robot_dfs(const int& move_num, stack<MyPair>move_order);
 };
@@ -34,8 +34,11 @@ public:
 	int transport_time = -1;
 	int loading_speed = -1;
 	int num = 0;
+	int berth_id = -1;
 	Berth() { };
 	Berth(int x, int y, int transport_time, int loading_speed);
+	MyPair find_goods_from_berth();
+	set<Record> goods_info;	//存储该泊位到每个货物的时间，货物x，y坐标，默认time从小到大
 };
 
 class Boat {

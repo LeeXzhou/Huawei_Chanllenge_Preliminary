@@ -12,7 +12,7 @@ const MyPair dx_dy[4] = { {0, 1} , {0, -1}, {-1, 0}, {1, 0} };
 extern int money, boat_capacity, id;
 extern char ch[N][N];
 extern MyPair goods_map[N][N]; //first记录value， second记录到期时间
-extern short dis[205][205][10];
+extern int dis[205][205][10];
 /*
 思路1：嗯贪，value/time最大的是最优方案
 不变性条件：若干个参数去决定拿个方案是最优的，
