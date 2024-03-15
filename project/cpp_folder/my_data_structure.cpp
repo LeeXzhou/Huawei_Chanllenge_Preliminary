@@ -33,7 +33,19 @@ Record::Record(int t, int x, int y)
 }
 bool Record::operator < (const Record& tmp) const
 {
-    return time < tmp.time;
+    if (time != tmp.time)
+    {
+        return time < tmp.time;
+    }
+    else if(cur_x != tmp.cur_x)
+    {
+        return cur_x < tmp.cur_x;
+    }
+    else
+    {
+        return cur_y < tmp.cur_y;
+    }
+    
 }
 
 bool Plan::operator < (const Plan& tmp) const

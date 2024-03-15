@@ -8,6 +8,7 @@
 using namespace std;
 bool check_valid(const int& x, const int& y);
 bool check_valid(const MyPair& x);
+const int round_robot_num(const int& x, const int& y);
 class Robot {
 public:
 	int x = -1, y = -1, goods = -1;

@@ -14,6 +14,18 @@ bool check_valid(const MyPair& x)
 	return check_valid(x.first, x.second);
 }
 
+const int round_robot_num(const int& x, const int& y)
+{
+	int ans = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		if (my_abs(robot[i].x, x) <= 3 && my_abs(robot[i].y, y) <= 3)
+		{
+			ans += 1;
+		}
+	}
+	return ans;
+}
 Berth::Berth(int x, int y, int transport_time, int loading_speed) {
 	this->x = x;
 	this->y = y;
@@ -31,7 +43,7 @@ MyPair Berth::find_goods_from_berth()
 	priority_queue<Plan> q;
 	for (auto cur = goods_info.begin(); cur != goods_info.end();)
 	{
-		if (cur->time <= id)
+		if (cur->time < id)
 		{
 			cur = goods_info.erase(cur);
 		}
@@ -40,13 +52,21 @@ MyPair Berth::find_goods_from_berth()
 			if (goods_map[cur->cur_x][cur->cur_y].first > 0)
 			{
 				//需要优化
-				q.push(Plan(goods_map[cur->cur_x][cur->cur_y].first,  + dis[cur->cur_x][cur->cur_y][berth_id], -1, { cur->cur_x,cur->cur_y }));
+				q.push(Plan(goods_map[cur->cur_x][cur->cur_y].first, dis[cur->cur_x][cur->cur_y][berth_id], -1, { cur->cur_x,cur->cur_y }));
 			}
 			cur++;
 		}
 	}
-	MyPair ret = q.top().target;
-	return ret;
+	if (!q.empty())
+	{
+		MyPair ret = q.top().target;
+		return ret;
+	}
+	else
+	{
+		return make_pair(-1,-1 );
+	}
+	
 }
 void Robot::find_goods()	//只有起始和目的地找货物
 {
@@ -58,8 +78,8 @@ void Robot::find_goods()	//只有起始和目的地找货物
 	queue<MyPair> q;
 	q.push({ x, y });
 	bool found = false;
-	int step = 0;
-	while (cnt < 10 && !q.empty())
+	int step = 0, find_max = round_robot_num(x, y);	//附近有几个人决定了需要找几个货物，如果机器人相隔太远他们就不需要找那么多防止找重了
+	while (cnt < find_max && !q.empty())
 	{
 		int q_size = q.size();
 		for (int j = 1; j <= q_size; j++)
@@ -100,8 +120,8 @@ void Robot::find_berth() //找泊位
 	int min_dis = 30000;
 	for (int i = 0; i < 10; i++)
 	{
-		if (dis[x][y][i] + id > berth[i].close_time)continue;
-		if (dis[x][y][i] < min_dis)
+		if (dis[x][y][i] > 0 && dis[x][y][i] + id > berth[i].close_time)continue;	//>0是防止图不连通
+		if (dis[x][y][i] > 0 && dis[x][y][i] < min_dis)
 		{
 			aim_num = i;
 			min_dis = dis[x][y][i];
@@ -197,9 +217,16 @@ void Robot::robot_control()
 					target_y = -1;
 					move_or_not = true;
 					MyPair target = berth[i].find_goods_from_berth();
-					target_x = target.first, target_y = target.second;
-					goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
-					find_road(dis[target_x][target_y][i]);
+					if (target.first == -1)
+					{
+						find_goods();
+					}
+					else
+					{
+						target_x = target.first, target_y = target.second;
+						goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+						find_road(dis[target_x][target_y][i]);
+					}					
 					return;
 				}
 			}
@@ -299,7 +326,7 @@ void Boat::boat_control()
 		{
 			if (id >= tail_time)//
 			{
-				if (id == berth[pos].close_time)//打烊了就走
+				if (id >= berth[pos].close_time)//打烊了就走
 				{
 					berth[pos].aimed = false;
 					left_time = berth[aim_berth].transport_time;
@@ -370,7 +397,7 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				int u_op = u.second;
 				robot[u_id].move_or_not = true;
 				
-				if (robot[u_id].goods == 0)
+				if (robot[u_id].goods == 0)	//存在隐患
 				{
 					goods_map[robot[u_id].target_x][robot[u_id].target_y].first = -goods_map[robot[u_id].target_x][robot[u_id].target_y].first;
 				}
@@ -383,7 +410,10 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				robot[u_id].x += dx_dy[u_op].first;
 				robot[u_id].y += dx_dy[u_op].second;
 				robot[u_id].move_or_not = true;
-				if(!robot[u_id].goods)robot[u_id].find_goods();
+				if (robot[u_id].goods == 0)
+				{
+					robot[u_id].find_goods();
+				}
 				else
 				{
 					robot[u_id].find_berth();
