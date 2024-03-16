@@ -32,7 +32,7 @@ void Init()
 		temp_transport_time[i] = berth[i].transport_time;
 	}
 	sort(temp_transport_time, temp_transport_time + 10);
-	tail_time = 15000 - (temp_transport_time[9] + temp_transport_time[8]+boat_capacity) * 2-temp_transport_time[9] - 2 *boat_capacity;
+	tail_time = 15000 - (temp_transport_time[9] + temp_transport_time[8] + boat_capacity) * 2 - temp_transport_time[9] - 2 * boat_capacity;
 	max_trans_time = temp_transport_time[9];
 	second_max_trans = temp_transport_time[8];
 	for (int i = 0; i < robot_num; i++)

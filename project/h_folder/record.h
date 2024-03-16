@@ -49,7 +49,7 @@ public:
 	int num = 0, pos = -1, status = -1, boat_id = -1;
 
 	int tail_status = -1;
-	int aim_berth = -1,left_time=-1;
+	int aim_berth = -1, left_time = -1;
 	Boat() { };
 	void boat_control();
 };

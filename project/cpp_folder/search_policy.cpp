@@ -1,5 +1,4 @@
 #include "../h_folder/search_policy.h"
-#include <thread>
 using namespace std;
 priority_queue<Plan, vector<Plan>, less<Plan>> Search_Policy::policy;
 
