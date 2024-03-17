@@ -122,7 +122,7 @@ void Robot::find_road()	//给定target下去找路
 		step++;
 	}
 }
-void Robot::robot_control()
+void Robot::robot_control()	//先让机器人移动后再判断当前位置能不能进一步操作，拿/放货物
 {
 	if (move_or_not)
 	{
@@ -140,7 +140,8 @@ void Robot::robot_control()
 			find_berth();
 		}
 	}
-	else if (target_x == x && target_y == y)
+	clash_solve();
+	if (target_x == x && target_y == y)
 	{
 		//修改目标地
 		if (goods == 1)	//身上有货物，判断当前位置是不是泊位
@@ -153,8 +154,22 @@ void Robot::robot_control()
 					berth[robot_id / 2].num += 1;
 					target_x = -1;
 					target_y = -1;
+<<<<<<< Updated upstream
 					move_or_not = true;
 					find_goods();
+=======
+					MyPair target = berth[i].find_goods_from_berth();
+					if (target.first == -1)
+					{
+						find_goods();
+					}
+					else
+					{
+						target_x = target.first, target_y = target.second;
+						goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+						find_road(dis[target_x][target_y][i]);
+					}
+>>>>>>> Stashed changes
 					return;
 				}
 			}
@@ -172,14 +187,13 @@ void Robot::robot_control()
 				}
 			}
 			cout << "get " << robot_id << endl;	//拿货物
+<<<<<<< Updated upstream
 			find_berth();
+=======
+>>>>>>> Stashed changes
 		}
 	}
-	else
-	{
-		//防碰撞
-		clash_solve();
-	}
+
 }
 
 void Boat::boat_control()
