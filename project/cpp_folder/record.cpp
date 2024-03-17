@@ -250,7 +250,6 @@ void Robot::robot_control()
 				}
 			}
 			cout << "get " << robot_id << endl;	//ÄÃ»õÎï
-			find_berth();
 		}
 	}
 }
@@ -371,7 +370,7 @@ void Boat::boat_control()
 
 bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 {
-	if (robot[move_num].move_or_not)return 0;
+	if (robot[move_num].move_or_not)return false;
 	for (int i = 0; i < 4; i++)
 	{
 		int ran_i = (i + id) % 4;
