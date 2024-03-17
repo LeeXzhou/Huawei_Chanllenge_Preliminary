@@ -172,7 +172,7 @@ void Robot::find_road(const int& min_dis)	//给定target下去找路
 			for (int i = 0; i < 4; i++)
 			{
 				MyPair tmp = u + dx_dy[i];
-				if (my_abs(tmp.first, target_x) + my_abs(tmp.second, target_y) > min_dis + 1)
+				if (my_abs(tmp.first, target_x) + my_abs(tmp.second, target_y) > min_dis + 1 - step)
 				{
 					continue;
 				}
