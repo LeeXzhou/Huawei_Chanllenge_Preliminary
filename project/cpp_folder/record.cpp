@@ -250,7 +250,7 @@ void Robot::robot_control()
 				}
 			}
 			cout << "get " << robot_id << endl;	//拿货物
-			move_or_not = true;	//不然拿货物时候发生碰撞会卡死
+			move_or_not = false;	//不然拿货物时候发生碰撞会卡死
 		}
 	}
 	else
