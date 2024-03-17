@@ -43,7 +43,7 @@ MyPair Berth::find_goods_from_berth()
 	priority_queue<Plan> q;
 	for (auto cur = goods_info.begin(); cur != goods_info.end();)
 	{
-		if (cur->time < id)
+		if (cur->time <= id)
 		{
 			cur = goods_info.erase(cur);
 		}
@@ -78,8 +78,9 @@ void Robot::find_goods()	//只有起始和目的地找货物
 	queue<MyPair> q;
 	q.push({ x, y });
 	bool found = false;
-	int step = 0, find_max = round_robot_num(x, y);	//附近有几个人决定了需要找几个货物，如果机器人相隔太远他们就不需要找那么多防止找重了
-	while (cnt < find_max && !q.empty())
+	int step = 0;
+	//find_max = round_robot_num(x, y);	//附近有几个人决定了需要找几个货物，如果机器人相隔太远他们就不需要找那么多防止找重了
+	while (cnt < 6 && !q.empty())	//测下来6效果较好
 	{
 		int q_size = q.size();
 		for (int j = 1; j <= q_size; j++)
@@ -122,7 +123,7 @@ void Robot::find_berth() //找泊位
 	int min_dis = 30000;
 	for (int i = 0; i < 10; i++)
 	{
-		if (dis[x][y][i] > 0 && dis[x][y][i] + id > berth[i].close_time)continue;	//>0是防止图不连通
+		if (dis[x][y][i] < 0 || dis[x][y][i] + id > berth[i].close_time)continue;	//判0是防止图不连通
 		if (dis[x][y][i] > 0 && dis[x][y][i] < min_dis)
 		{
 			aim_num = i;
