@@ -205,7 +205,8 @@ void Robot::robot_control()
 			find_berth();
 		}
 	}
-	else if (target_x == x && target_y == y)
+	clash_solve();
+	if (target_x == x && target_y == y)
 	{
 		//修改目标地
 		if (goods == 1)	//身上有货物，判断当前位置是不是泊位
@@ -218,7 +219,6 @@ void Robot::robot_control()
 					berth[i].num += 1;
 					target_x = -1;
 					target_y = -1;
-					move_or_not = true;
 					MyPair target = berth[i].find_goods_from_berth();
 					if (target.first == -1)
 					{
@@ -250,13 +250,8 @@ void Robot::robot_control()
 				}
 			}
 			cout << "get " << robot_id << endl;	//拿货物
-			move_or_not = false;	//不然拿货物时候发生碰撞会卡死
+			find_berth();
 		}
-	}
-	else
-	{
-		//防碰撞
-		clash_solve();
 	}
 }
 
