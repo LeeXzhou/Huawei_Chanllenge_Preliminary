@@ -1,5 +1,4 @@
 #include "../h_folder/search_policy.h"
-#include <thread>
 using namespace std;
 priority_queue<Plan, vector<Plan>, less<Plan>> Search_Policy::policy;
 
@@ -16,7 +15,7 @@ unique_ptr<MyPair[]> Search_Policy::choose()
 		{
 			visited[tmp.robot_id] = true;
 			choice[tmp.robot_id] = tmp.target;	
-			goods_map[tmp.target.first][tmp.target.second].first = -goods_map[tmp.target.first][tmp.target.second].first;	//置为相反数方便还原
+			goods_map[tmp.target.first][tmp.target.second].first = -goods_map[tmp.target.first][tmp.target.second].first;
 		}
 	}
 	return choice;

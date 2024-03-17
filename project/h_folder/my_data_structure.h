@@ -4,6 +4,10 @@
 #include <iostream>
 #include <memory>
 #include <stack>
+#include<cstring>
+#include <random>
+#include <set>
+#include<algorithm>
 using namespace std;
 using MyPair = std::pair<int, int>;
 
@@ -23,6 +27,10 @@ struct Plan {
 	bool operator < (const Plan& tmp) const;
 };
 struct Record {
-	int val, time, cur_x, cur_y;
+	int time = -1, cur_x = -1, cur_y = -1;
+	Record(int t, int x, int y);
+	bool operator < (const Record& tmp) const;
 };
+
+int my_abs(const int& a, const int& b);
 #endif // !my_data_structure_h
