@@ -70,6 +70,11 @@ MyPair Berth::find_goods_from_berth()
 }
 void Robot::find_goods()	//只有起始和目的地找货物
 {
+	if (goods_map[x][y].first > 0 && goods_map[x][y].second > id)
+	{
+		target_x = x; target_y = y;
+		return;
+	}
 	int cnt = 0;
 	memset(pre, 0, sizeof(pre));
 	memset(visited, false, sizeof(visited));
@@ -119,7 +124,7 @@ void Robot::find_goods()	//只有起始和目的地找货物
 	}
 	if (!choice.empty())
 	{
-		MyPair now = choice.top().target, tmp = {0, 0};
+		MyPair now = choice.top().target, tmp = {-1, -1};
 		target_x = now.first, target_y = now.second;
 		goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
 		while (tmp.first != x || tmp.second != y)
@@ -252,7 +257,28 @@ void Robot::robot_control()
 		}
 		else    //身上没有货物，判断当前位置是不是泊位
 		{
+			/*
+			for (int i = 0; i < 10; i++)
+			{
+				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
+				{
+					MyPair target = berth[i].find_goods_from_berth();
+					if (target.first == -1)
+					{
+						find_goods();
+					}
+					else
+					{
+						target_x = target.first, target_y = target.second;
+						goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+						find_road(dis[target_x][target_y][i]);
+					}
+					return;
+				}
+			}
+			*/
 			cout << "get " << robot_id << endl;	//拿货物
+			find_berth();
 		}
 	}
 }
@@ -373,6 +399,7 @@ void Boat::boat_control()
 
 bool Robot::robot_dfs(const int& move_num, stack<MyPair>& move_order)
 {
+	//cerr << "I am in dfs" << endl;
 	if (robot[move_num].move_or_not)return false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -480,7 +507,7 @@ void Robot::clash_solve()
 		return;
 	}
 
-	int answer = 0;
+	bool answer = false;
 	move_or_not = true;
 	for (int i = 0; i < 10; i++)
 	{
@@ -488,6 +515,7 @@ void Robot::clash_solve()
 		{
 			stack<MyPair> move_order;
 			answer = robot_dfs(i, move_order);
+			//cerr << "I am out of dfs" << endl;
 			break;
 		}
 	}
