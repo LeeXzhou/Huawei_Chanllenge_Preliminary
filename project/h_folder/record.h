@@ -25,7 +25,7 @@ public:
 	void find_berth();
 	void find_road(const int& min_dis);
 	void clash_solve();
-	bool robot_dfs(const int& move_num, stack<MyPair>move_order);
+	bool robot_dfs(const int& move_num, stack<MyPair>& move_order);
 };
 
 class Berth {

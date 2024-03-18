@@ -368,7 +368,7 @@ void Boat::boat_control()
 	}
 }
 
-bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
+bool Robot::robot_dfs(const int& move_num, stack<MyPair>& move_order)
 {
 	if (robot[move_num].move_or_not)return false;
 	for (int i = 0; i < 4; i++)
@@ -423,7 +423,7 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 			return true;
 		}
 	}
-	int answer = 0;
+	bool answer = false;
 	robot[move_num].move_or_not = true;
 	for (int i = 0; i < 4; i++)
 	{
@@ -436,8 +436,8 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 				if (robot[j].move_or_not)continue;
 				move_order.push({ move_num,ran_i });
 				answer = robot_dfs(j, move_order);
-				move_order.pop();
-				if (answer == 1)return true;
+				//move_order.pop();
+				if (answer == true)return true;
 			}
 		}
 	}
@@ -448,11 +448,11 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>move_order)
 void Robot::clash_solve()
 {
 	if (move_or_not)return;
-	int flag = 1;
+	bool flag = true;
 	for (int i = 0; i < 10; i++)
 	{
 		if (i == robot_id)continue;
-		if (nxt[x][y] == make_pair(robot[i].x, robot[i].y)) { flag = 0; break; }
+		if (nxt[x][y] == make_pair(robot[i].x, robot[i].y)) { flag = false; break; }
 	}
 
 	if (flag)//若下一步没有机器人
