@@ -11,6 +11,10 @@ int dis[205][205][10];	//-1表示不可达
 int tail_time;
 int max_trans_time;
 int second_max_trans;
+int threshold__time;
+int trian_time;
+MyPair berth_pair[5];
+int couple_berth[10];
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -25,16 +29,35 @@ void Init()
 		berth[id].berth_id = id;
 	}
 	cin >> boat_capacity;
-	//尾杀时间
-	int temp_transport_time[10] = { 0 };
+	//三角杀时间
+	
+	pair<int,int> temp_transport_time[10];
+	
 	for (int i = 0; i < 10; i++)
 	{
-		temp_transport_time[i] = berth[i].transport_time;
+		temp_transport_time[i] = { berth[i].transport_time,i };
 	}
 	sort(temp_transport_time, temp_transport_time + 10);
-	tail_time = 15000 - (temp_transport_time[9] + temp_transport_time[8] + boat_capacity) * 2 - temp_transport_time[9] - 2 * boat_capacity;
-	max_trans_time = temp_transport_time[9];
-	second_max_trans = temp_transport_time[8];
+	
+	for (int i = 0; i < 5; i++)
+	{
+		trian_time = max(trian_time, temp_transport_time[i].first + temp_transport_time[9 - i].first);
+	}
+	trian_time += 500;
+	for (int i = 0; i < 5; i++)
+	{
+		berth_pair[i] = {temp_transport_time[i].second,temp_transport_time[9 - i].second};
+		couple_berth[temp_transport_time[i].second] = temp_transport_time[9 - i].second;
+		couple_berth[temp_transport_time[9-i].second] = temp_transport_time[i].second;
+	}
+	
+	threshold__time = 15000 - boat_capacity - trian_time - 10;
+	cerr << "TTTTTTTTTTTTTTTTTTTTTTT" << threshold__time << endl;
+	/// <summary>
+	/// 尾杀时间四个单程加两个容量加一个容错
+	/// 到虚拟点去刷新第一个，先到的找剩余量少的
+	/// </summary>
+
 	for (int i = 0; i < robot_num; i++)
 	{
 		robot[i].robot_id = i;

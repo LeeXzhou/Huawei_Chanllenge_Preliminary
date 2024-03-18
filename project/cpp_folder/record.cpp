@@ -79,6 +79,7 @@ void Robot::find_goods()	//只有起始和目的地找货物
 	q.push({ x, y });
 	bool found = false;
 	int step = 0;
+	priority_queue<Plan> choice;
 	//find_max = round_robot_num(x, y);	//附近有几个人决定了需要找几个货物，如果机器人相隔太远他们就不需要找那么多防止找重了
 	while (cnt < 6 && !q.empty())	//测下来6效果较好
 	{
@@ -97,7 +98,8 @@ void Robot::find_goods()	//只有起始和目的地找货物
 						good_to_berth_dis = min(good_to_berth_dis, dis[u.first][u.second][i]);
 					}
 				}
-				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
+				choice.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
+				//Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
 				//放入Search_Policy类的优先队列中，利用启发式来决定去哪
 				cnt += 1;
 			}
@@ -114,6 +116,18 @@ void Robot::find_goods()	//只有起始和目的地找货物
 			}
 		}
 		step++;
+	}
+	if (!choice.empty())
+	{
+		MyPair now = choice.top().target, tmp = { 0, 0 };
+		target_x = now.first, target_y = now.second;
+		goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+		while (tmp.first != x || tmp.second != y)
+		{
+			tmp = pre[now.first][now.second];
+			nxt[tmp.first][tmp.second] = now;
+			now = tmp;
+		}
 	}
 }
 
@@ -216,6 +230,7 @@ void Robot::robot_control()
 				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
 				{
 					cout << "pull " << robot_id << endl;
+					goods = 0;
 					berth[i].num += 1;
 					target_x = -1;
 					target_y = -1;
@@ -238,43 +253,35 @@ void Robot::robot_control()
 		}
 		else    //身上没有货物，判断当前位置是不是泊位
 		{
-			for (int i = 0; i < 10; i++)	//
-			{
-				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
-				{
-					MyPair target = berth[i].find_goods_from_berth();
-					target_x = target.first, target_y = target.second;
-					goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
-					find_road(dis[target_x][target_y][i]);
-					return;
-				}
-			}
 			cout << "get " << robot_id << endl;	//拿货物
+			goods = 1;
+			find_berth();
 		}
 	}
 }
 
+
+void berth_num_update()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		temp_berth_num[i] = berth[i].num;
+		if (berth[i].aimed)
+		{
+			temp_berth_num[i] = max(0, temp_berth_num[i] - boat_capacity);
+		}
+	}
+}
 //tail_status=-1的时候代表船没进入尾杀阶段
 //tail_status=0的时候代表船在尾杀阶段锁定了第一个港口
 //tail_status=1的时候代表船在尾杀阶段锁定了第二个港口
+
 void Boat::boat_control()
 {
+	if (tail_status == 2)return;
 	if (status == 0) //正在移动中
 	{
-		left_time -= 1;
-		if (id >= tail_time && tail_status == -1)
-		{
-			if (num == 0)//向港口移动就让目标港口打烊，到达港口后要走三个单程，三个单程加起来最大时间为2 * max_trans_time + second_max_trans
-			{
-				berth[aim_berth].close_time = 15000 - 2 * max_trans_time - second_max_trans - boat_capacity - boat_capacity / berth[aim_berth].loading_speed - 10;
-				berth[aim_berth].close_time = max(berth[aim_berth].close_time, id + berth[aim_berth].transport_time + boat_capacity / berth[aim_berth].loading_speed + 10);
-			}
-			else
-			{
-				//啥也不干
-			}
-		}
-
+		//left_time -= 1;
 	}
 	else if (status == 1)
 	{
@@ -288,57 +295,62 @@ void Boat::boat_control()
 			{
 				if (berth[i].num > temp_goods_num && berth[i].aimed == false)//选取一个没有被锁定且驳口货物量最大的驳口
 				{
-					if (id >= tail_time)
-					{
-						if (tail_status == -1 || tail_status == 0)//如果目标打烊，不选
-						{
-							if (berth[i].close_time < 15000)continue;
-						}
-						else//就是在虚拟点的时候如果这个船开了两波尾杀了，就让他在虚拟点不动了，这个判断可以写在循环外面
-						{
-							return;
-						}
-					}
 					temp_goods_num = berth[i].num;
 					aim_berth_temp = i;
 				}
 			}
-			berth[aim_berth_temp].aimed = true;
-			aim_berth = aim_berth_temp;
-			if (id > tail_time)
+			
+
+			//判进入三角杀
+			if (trian_on||(!trian_on && id + berth[aim_berth_temp].transport_time * 2 + boat_capacity / berth[aim_berth_temp].loading_speed + 1 > threshold__time))
 			{
-				if (tail_status == -1)
-				{//第一波尾杀，目标港口设定打烊时间，打烊时间为三个单程
-					berth[aim_berth].close_time = 15000 - 2 * max_trans_time - second_max_trans - boat_capacity - boat_capacity / berth[aim_berth].loading_speed - 10;
-					berth[aim_berth].close_time = max(berth[aim_berth].close_time, id + berth[aim_berth].transport_time + boat_capacity / berth[aim_berth].loading_speed + 10);
+				if (!trian_on)tail_time = id;
+				trian_on = true;
+				//这里有个优先性，触发尾杀越早的去货物和越少的驳口组
+				//berth_pair的first比second小，先去远的，再用500ms去近的。
+				int temp_num = 1000000, pair_id = -1;
+				for (int i = 0; i < 5; i++)
+				{
+					if (trian_or_not[i])continue;
+					if (berth_pair[i].first + berth_pair[i].second < temp_num)
+					{
+						temp_num = berth_pair[i].first + berth_pair[i].second;
+						pair_id = i;
+					}
 				}
-				else
-				{//第二波尾杀，目标港口设定打烊时间，打烊时间为目标港口的单程时间
-					berth[aim_berth].close_time = 15000 - berth[aim_berth].transport_time - 2;
-				}
-				tail_status++;
+				trian_or_not[pair_id] = true;
+				tail_status = 0;
+				aim_berth_temp = berth_pair[pair_id].second;
+				
+				berth[aim_berth_temp].close_time = 15000 - berth[berth_pair[pair_id].first].transport_time - 500 - (boat_capacity / berth[berth_pair[pair_id].first].loading_speed) - 2;
+				berth[berth_pair[pair_id].first].close_time = 15000 - berth[berth_pair[pair_id].first].transport_time - 1;
 			}
 
-			left_time = berth[aim_berth].transport_time;
+
+			berth[aim_berth_temp].aimed = true;
+			aim_berth = aim_berth_temp;
+			//left_time = berth[aim_berth].transport_time;
+
 
 			cout << "ship " << boat_id << " " << aim_berth_temp << endl; //先船后泊位
+			cerr << "ship " << boat_id << " " << aim_berth_temp << endl; //先船后泊位
 		}
 		else//在装货
 		{
-			if (id >= tail_time)
+			if (tail_status==0)
 			{
-				if (id >= berth[pos].close_time || num == boat_capacity)//打烊了就走
+				if (id >= berth[pos].close_time)
 				{
-					berth[pos].aimed = false;
-					left_time = berth[aim_berth].transport_time;
-					aim_berth = -1;
-					cout << "go " << boat_id << endl;
+					cout << "ship " << boat_id << " " << couple_berth[pos] << endl;
+					tail_status = 1;
 				}
-				else
+			}
+			else if (tail_status == 1)
+			{
+				if (id >= berth[pos].close_time)
 				{
-					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
-					num += add;
-					berth[pos].num -= add;
+					cout << "go " << boat_id << endl;
+					tail_status = 2;
 				}
 			}
 			else
@@ -353,12 +365,12 @@ void Boat::boat_control()
 				else
 				{
 					berth[pos].aimed = false;
-					left_time = berth[aim_berth].transport_time;
+					//left_time = berth[aim_berth].transport_time;
 					aim_berth = -1;
 					cout << "go " << boat_id << endl;
 				}
 			}
-
+			
 		}
 		status = 0;
 	}
@@ -368,7 +380,7 @@ void Boat::boat_control()
 	}
 }
 
-bool Robot::robot_dfs(const int& move_num, stack<MyPair>& move_order)
+bool Robot::robot_dfs(const int& move_num, stack<MyPair> move_order)
 {
 	if (robot[move_num].move_or_not)return false;
 	for (int i = 0; i < 4; i++)
@@ -413,6 +425,7 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>& move_order)
 				if (robot[u_id].goods == 0)
 				{
 					robot[u_id].find_goods();
+
 				}
 				else
 				{
@@ -436,12 +449,12 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair>& move_order)
 				if (robot[j].move_or_not)continue;
 				move_order.push({ move_num,ran_i });
 				answer = robot_dfs(j, move_order);
-				//move_order.pop();
+				move_order.pop();
 				if (answer == true)return true;
 			}
 		}
 	}
-	robot[move_num].move_or_not = false;
+	if(answer==false)robot[move_num].move_or_not = false;
 	return false;
 }
 
@@ -477,7 +490,7 @@ void Robot::clash_solve()
 		return;
 	}
 
-	int answer = 0;
+	bool answer = 0;
 	move_or_not = true;
 	for (int i = 0; i < 10; i++)
 	{

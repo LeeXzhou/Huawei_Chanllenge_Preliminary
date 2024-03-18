@@ -25,7 +25,7 @@ public:
 	void find_berth();
 	void find_road(const int& min_dis);
 	void clash_solve();
-	bool robot_dfs(const int& move_num, stack<MyPair>& move_order);
+	bool robot_dfs(const int& move_num, stack<MyPair> move_order);
 };
 
 class Berth {
@@ -53,11 +53,21 @@ public:
 	Boat() { };
 	void boat_control();
 };
+
+void berth_num_update();
 extern Berth berth[berth_num + 10];
 extern Robot robot[robot_num + 10];
 extern Boat boat[10];
 extern int tail_time;
 extern int max_trans_time;
 extern int second_max_trans;
+
+extern int threshold__time;
+extern int trian_time;
+extern MyPair berth_pair[5];
+static bool trian_on = false;
+static bool trian_or_not[5];
+extern int couple_berth[10];
+static int temp_berth_num[10];
 #endif // !record_h
 

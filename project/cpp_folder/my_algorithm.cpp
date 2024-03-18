@@ -95,14 +95,23 @@ namespace my_alg {
 	}
 	void test_player0()
 	{
+		
 		for (int i = 0; i < 10; i++)
 		{
 			robot[i].robot_control();
 		}
+
+		berth_num_update();
+
 		for (int i = 0; i < 5; i++)
 		{
 			boat[i].boat_control();
 		}
+		for (int i = 0; i < 9; i++)
+		{
+			cerr << berth[i].num << '\t';
+		}
+		cerr << endl;
 		
 		if (!Search_Policy::policy.empty())
 		{
