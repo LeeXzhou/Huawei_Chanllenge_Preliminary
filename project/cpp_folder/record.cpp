@@ -79,6 +79,7 @@ void Robot::find_goods()	//只有起始和目的地找货物
 	q.push({ x, y });
 	bool found = false;
 	int step = 0;
+	priority_queue<Plan> choice;
 	//find_max = round_robot_num(x, y);	//附近有几个人决定了需要找几个货物，如果机器人相隔太远他们就不需要找那么多防止找重了
 	while (cnt < 6 && !q.empty())	//测下来6效果较好
 	{
@@ -97,7 +98,8 @@ void Robot::find_goods()	//只有起始和目的地找货物
 						good_to_berth_dis = min(good_to_berth_dis, dis[u.first][u.second][i]);
 					}
 				}
-				Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
+				choice.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
+				//Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
 				//放入Search_Policy类的优先队列中，利用启发式来决定去哪
 				cnt += 1;
 			}
@@ -114,6 +116,18 @@ void Robot::find_goods()	//只有起始和目的地找货物
 			}
 		}
 		step++;
+	}
+	if (!choice.empty())
+	{
+		MyPair now = choice.top().target, tmp = {0, 0};
+		target_x = now.first, target_y = now.second;
+		goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+		while (tmp.first != x || tmp.second != y)
+		{
+			tmp = pre[now.first][now.second];
+			nxt[tmp.first][tmp.second] = now;
+			now = tmp;
+		}
 	}
 }
 
@@ -238,17 +252,6 @@ void Robot::robot_control()
 		}
 		else    //身上没有货物，判断当前位置是不是泊位
 		{
-			for (int i = 0; i < 10; i++)	//
-			{
-				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
-				{
-					MyPair target = berth[i].find_goods_from_berth();
-					target_x = target.first, target_y = target.second;
-					goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
-					find_road(dis[target_x][target_y][i]);
-					return;
-				}
-			}
 			cout << "get " << robot_id << endl;	//拿货物
 		}
 	}
@@ -496,8 +499,6 @@ void Robot::clash_solve()
 			if (now + dx_dy[i] == nxt[x][y])
 			{
 				cout << "move " << robot_id << " " << i << endl;
-
-
 
 				x = nxt[now.first][now.second].first;
 				y = nxt[now.first][now.second].second;
