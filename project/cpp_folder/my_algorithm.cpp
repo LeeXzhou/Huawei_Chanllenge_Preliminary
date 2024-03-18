@@ -58,39 +58,15 @@ namespace my_alg {
 			}
 		}
 	}
-	void boat_control()
+	void berth_num_update()
 	{
-		if (boat[0].status == 0) //�����ƶ���
+		for (int i = 0; i < 10; i++)
 		{
-
-		}
-		else if (boat[0].status == 1)
-		{
-			if (boat[0].pos == -1)
+			temp_berth_num[i] = berth[i].num;
+			if (berth[i].aimed)
 			{
-				//������-1��ǰ��0����ת��Ϊ�ƶ���
-				boat[0].num = 0;
-				cout << "ship 0 0" << endl;
+				temp_berth_num[i] = max(0, temp_berth_num[i] - boat_capacity);
 			}
-			else
-			{
-				if (berth[boat[0].pos].num > 0)
-				{
-					//��ת��Ϊ�ƶ��У�������0��ǰ��-1
-					int add = max(berth[0].loading_speed, berth[0].num);
-					boat[0].num += add;
-					berth[boat[0].pos].num -= add;
-				}
-				else
-				{
-					cout << "go 0" << endl;
-				}
-			}
-			boat[0].status = 0;
-		}
-		else
-		{
-			//��λ��ȴ�״̬����ʱ������
 		}
 	}
 	void test_player0()

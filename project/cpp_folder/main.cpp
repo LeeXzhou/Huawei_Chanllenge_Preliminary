@@ -121,13 +121,6 @@ int main()
 	{
 		id = Input();
 		my_alg::test_player0();
-		/*
-		cerr << id << "!";
-		for (int i = 0; i < robot_num; i++)
-		{
-			cout << "move " << i << " " << rand() % 4 << endl;
-		}
-		*/
 		puts("OK");
 		fflush(stdout);
 	}

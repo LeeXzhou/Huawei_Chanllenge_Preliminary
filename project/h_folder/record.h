@@ -54,7 +54,6 @@ public:
 	void boat_control();
 };
 
-void berth_num_update();
 extern Berth berth[berth_num + 10];
 extern Robot robot[robot_num + 10];
 extern Boat boat[10];

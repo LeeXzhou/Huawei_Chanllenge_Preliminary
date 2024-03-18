@@ -284,18 +284,6 @@ void Robot::robot_control()
 	}
 }
 
-
-void berth_num_update()
-{
-	for (int i = 0; i < 10; i++)
-	{
-		temp_berth_num[i] = berth[i].num;
-		if (berth[i].aimed)
-		{
-			temp_berth_num[i] = max(0, temp_berth_num[i] - boat_capacity);
-		}
-	}
-}
 //tail_status=-1的时候代表船没进入尾杀阶段
 //tail_status=0的时候代表船在尾杀阶段锁定了第一个港口
 //tail_status=1的时候代表船在尾杀阶段锁定了第二个港口
