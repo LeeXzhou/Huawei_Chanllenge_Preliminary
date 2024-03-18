@@ -109,6 +109,15 @@ int Input()
 int main()
 {
 	Init();
+	/*
+	id = Input();
+	for (int i = 0; i < 10; i++)
+	{
+		robot[i].find_berth();
+	}
+	puts("OK");
+	fflush(stdout);
+	*/
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
 		id = Input();

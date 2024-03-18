@@ -51,7 +51,7 @@ MyPair Berth::find_goods_from_berth()
 		{
 			if (goods_map[cur->cur_x][cur->cur_y].first > 0)
 			{
-				//ĞèÒªÓÅ»¯
+				//éœ€è¦ä¼˜åŒ–
 				q.push(Plan(goods_map[cur->cur_x][cur->cur_y].first, dis[cur->cur_x][cur->cur_y][berth_id], -1, { cur->cur_x,cur->cur_y }));
 			}
 			cur++;
@@ -68,8 +68,13 @@ MyPair Berth::find_goods_from_berth()
 	}
 
 }
-void Robot::find_goods()	//Ö»ÓĞÆğÊ¼ºÍÄ¿µÄµØÕÒ»õÎï
+void Robot::find_goods()	//åªæœ‰èµ·å§‹å’Œç›®çš„åœ°æ‰¾è´§ç‰©
 {
+	if (goods_map[x][y].first > 0 && goods_map[x][y].second > id)
+	{
+		target_x = x; target_y = y;
+		return;
+	}
 	int cnt = 0;
 	memset(pre, 0, sizeof(pre));
 	memset(visited, false, sizeof(visited));
@@ -80,15 +85,15 @@ void Robot::find_goods()	//Ö»ÓĞÆğÊ¼ºÍÄ¿µÄµØÕÒ»õÎï
 	bool found = false;
 	int step = 0;
 	priority_queue<Plan> choice;
-	//find_max = round_robot_num(x, y);	//¸½½üÓĞ¼¸¸öÈË¾ö¶¨ÁËĞèÒªÕÒ¼¸¸ö»õÎï£¬Èç¹û»úÆ÷ÈËÏà¸ôÌ«Ô¶ËûÃÇ¾Í²»ĞèÒªÕÒÄÇÃ´¶à·ÀÖ¹ÕÒÖØÁË
-	while (cnt < 6 && !q.empty())	//²âÏÂÀ´6Ğ§¹û½ÏºÃ
+	//find_max = round_robot_num(x, y);	//é™„è¿‘æœ‰å‡ ä¸ªäººå†³å®šäº†éœ€è¦æ‰¾å‡ ä¸ªè´§ç‰©ï¼Œå¦‚æœæœºå™¨äººç›¸éš”å¤ªè¿œä»–ä»¬å°±ä¸éœ€è¦æ‰¾é‚£ä¹ˆå¤šé˜²æ­¢æ‰¾é‡äº†
+	while (cnt < 6 && !q.empty())	//æµ‹ä¸‹æ¥6æ•ˆæœè¾ƒå¥½
 	{
 		int q_size = q.size();
 		for (int j = 1; j <= q_size; j++)
 		{
 			MyPair u = q.front();
 			q.pop();
-			if (goods_map[u.first][u.second].first > 0 && goods_map[u.first][u.second].second - id > step + 1)	//¸øÒ»µãÈİ´í
+			if (goods_map[u.first][u.second].first > 0 && goods_map[u.first][u.second].second - id > step + 1)	//ç»™ä¸€ç‚¹å®¹é”™
 			{
 				int good_to_berth_dis = 30000;
 				for (int i = 0; i < 10; i++)
@@ -100,7 +105,7 @@ void Robot::find_goods()	//Ö»ÓĞÆğÊ¼ºÍÄ¿µÄµØÕÒ»õÎï
 				}
 				choice.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
 				//Search_Policy::policy.push(Plan(goods_map[u.first][u.second].first, step + good_to_berth_dis, robot_id, u));
-				//·ÅÈëSearch_PolicyÀàµÄÓÅÏÈ¶ÓÁĞÖĞ£¬ÀûÓÃÆô·¢Ê½À´¾ö¶¨È¥ÄÄ
+				//æ”¾å…¥Search_Policyç±»çš„ä¼˜å…ˆé˜Ÿåˆ—ä¸­ï¼Œåˆ©ç”¨å¯å‘å¼æ¥å†³å®šå»å“ª
 				cnt += 1;
 			}
 
@@ -119,7 +124,7 @@ void Robot::find_goods()	//Ö»ÓĞÆğÊ¼ºÍÄ¿µÄµØÕÒ»õÎï
 	}
 	if (!choice.empty())
 	{
-		MyPair now = choice.top().target, tmp = { 0, 0 };
+		MyPair now = choice.top().target, tmp = {-1, -1};
 		target_x = now.first, target_y = now.second;
 		goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
 		while (tmp.first != x || tmp.second != y)
@@ -131,13 +136,13 @@ void Robot::find_goods()	//Ö»ÓĞÆğÊ¼ºÍÄ¿µÄµØÕÒ»õÎï
 	}
 }
 
-void Robot::find_berth() //ÕÒ²´Î»
+void Robot::find_berth() //æ‰¾æ³Šä½
 {
 	int aim_num = -1;
 	int min_dis = 30000;
 	for (int i = 0; i < 10; i++)
 	{
-		if (dis[x][y][i] < 0 || dis[x][y][i] + id > berth[i].close_time)continue;	//ÅĞ0ÊÇ·ÀÖ¹Í¼²»Á¬Í¨
+		if (dis[x][y][i] < 0 || dis[x][y][i] + id > berth[i].close_time)continue;	//åˆ¤0æ˜¯é˜²æ­¢å›¾ä¸è¿é€š
 		if (dis[x][y][i] > 0 && dis[x][y][i] < min_dis)
 		{
 			aim_num = i;
@@ -148,12 +153,12 @@ void Robot::find_berth() //ÕÒ²´Î»
 	target_x = berth[aim_num].x;
 	target_y = berth[aim_num].y;
 	/*
-	²»ÖªµÀ¸Ã·ÅÄÄ£¬ÏÈÕâÃ´·Å×Å
+	ä¸çŸ¥é“è¯¥æ”¾å“ªï¼Œå…ˆè¿™ä¹ˆæ”¾ç€
 	*/
 	find_road(min_dis);
 }
 
-void Robot::find_road(const int& min_dis)	//¸ø¶¨targetÏÂÈ¥ÕÒÂ·
+void Robot::find_road(const int& min_dis)	//ç»™å®štargetä¸‹å»æ‰¾è·¯
 {
 	memset(pre, 0, sizeof(pre));
 	memset(visited, false, sizeof(visited));
@@ -209,7 +214,7 @@ void Robot::robot_control()
 	}
 	if (target_x == -1)
 	{
-		//¶¨¸öÄ¿±êµØ£¬»õÎïµØ
+		//å®šä¸ªç›®æ ‡åœ°ï¼Œè´§ç‰©åœ°
 		if (goods == 0)
 		{
 			find_goods();
@@ -222,8 +227,8 @@ void Robot::robot_control()
 	clash_solve();
 	if (target_x == x && target_y == y)
 	{
-		//ĞŞ¸ÄÄ¿±êµØ
-		if (goods == 1)	//ÉíÉÏÓĞ»õÎï£¬ÅĞ¶Ïµ±Ç°Î»ÖÃÊÇ²»ÊÇ²´Î»
+		//ä¿®æ”¹ç›®æ ‡åœ°
+		if (goods == 1)	//èº«ä¸Šæœ‰è´§ç‰©ï¼Œåˆ¤æ–­å½“å‰ä½ç½®æ˜¯ä¸æ˜¯æ³Šä½
 		{
 			for (int i = 0; i < 10; i++)
 			{
@@ -251,10 +256,29 @@ void Robot::robot_control()
 
 			find_berth();
 		}
-		else    //ÉíÉÏÃ»ÓĞ»õÎï£¬ÅĞ¶Ïµ±Ç°Î»ÖÃÊÇ²»ÊÇ²´Î»
+		else    //èº«ä¸Šæ²¡æœ‰è´§ç‰©ï¼Œåˆ¤æ–­å½“å‰ä½ç½®æ˜¯ä¸æ˜¯æ³Šä½
 		{
-			cout << "get " << robot_id << endl;	//ÄÃ»õÎï
-			goods = 1;
+			/*
+			for (int i = 0; i < 10; i++)
+			{
+				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
+				{
+					MyPair target = berth[i].find_goods_from_berth();
+					if (target.first == -1)
+					{
+						find_goods();
+					}
+					else
+					{
+						target_x = target.first, target_y = target.second;
+						goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+						find_road(dis[target_x][target_y][i]);
+					}
+					return;
+				}
+			}
+			*/
+			cout << "get " << robot_id << endl;	//æ‹¿è´§ç‰©
 			find_berth();
 		}
 	}
@@ -272,14 +296,14 @@ void berth_num_update()
 		}
 	}
 }
-//tail_status=-1µÄÊ±ºò´ú±í´¬Ã»½øÈëÎ²É±½×¶Î
-//tail_status=0µÄÊ±ºò´ú±í´¬ÔÚÎ²É±½×¶ÎËø¶¨ÁËµÚÒ»¸ö¸Û¿Ú
-//tail_status=1µÄÊ±ºò´ú±í´¬ÔÚÎ²É±½×¶ÎËø¶¨ÁËµÚ¶ş¸ö¸Û¿Ú
+//tail_status=-1çš„æ—¶å€™ä»£è¡¨èˆ¹æ²¡è¿›å…¥å°¾æ€é˜¶æ®µ
+//tail_status=0çš„æ—¶å€™ä»£è¡¨èˆ¹åœ¨å°¾æ€é˜¶æ®µé”å®šäº†ç¬¬ä¸€ä¸ªæ¸¯å£
+//tail_status=1çš„æ—¶å€™ä»£è¡¨èˆ¹åœ¨å°¾æ€é˜¶æ®µé”å®šäº†ç¬¬äºŒä¸ªæ¸¯å£
 
 void Boat::boat_control()
 {
 	if (tail_status == 2)return;
-	if (status == 0) //ÕıÔÚÒÆ¶¯ÖĞ
+	if (status == 0) //æ­£åœ¨ç§»åŠ¨ä¸­
 	{
 		//left_time -= 1;
 	}
@@ -287,13 +311,13 @@ void Boat::boat_control()
 	{
 		if (pos == -1)
 		{
-			//ÏÖÔÚÔÚ-1£¬Ç°Íù0£¬´¬×ª±äÎªÒÆ¶¯ÖĞ
+			//ç°åœ¨åœ¨-1ï¼Œå‰å¾€0ï¼Œèˆ¹è½¬å˜ä¸ºç§»åŠ¨ä¸­
 			num = 0;
 			int aim_berth_temp = -1;
 			int temp_goods_num = -1;
 			for (int i = 0; i < 10; i++)
 			{
-				if (berth[i].num > temp_goods_num && berth[i].aimed == false)//Ñ¡È¡Ò»¸öÃ»ÓĞ±»Ëø¶¨ÇÒ²µ¿Ú»õÎïÁ¿×î´óµÄ²µ¿Ú
+				if (berth[i].num > temp_goods_num && berth[i].aimed == false)//é€‰å–ä¸€ä¸ªæ²¡æœ‰è¢«é”å®šä¸”é©³å£è´§ç‰©é‡æœ€å¤§çš„é©³å£
 				{
 					temp_goods_num = berth[i].num;
 					aim_berth_temp = i;
@@ -301,13 +325,13 @@ void Boat::boat_control()
 			}
 			
 
-			//ÅĞ½øÈëÈı½ÇÉ±
+			//åˆ¤è¿›å…¥ä¸‰è§’æ€
 			if (trian_on||(!trian_on && id + berth[aim_berth_temp].transport_time * 2 + boat_capacity / berth[aim_berth_temp].loading_speed + 1 > threshold__time))
 			{
 				if (!trian_on)tail_time = id;
 				trian_on = true;
-				//ÕâÀïÓĞ¸öÓÅÏÈĞÔ£¬´¥·¢Î²É±Ô½ÔçµÄÈ¥»õÎïºÍÔ½ÉÙµÄ²µ¿Ú×é
-				//berth_pairµÄfirst±ÈsecondĞ¡£¬ÏÈÈ¥Ô¶µÄ£¬ÔÙÓÃ500msÈ¥½üµÄ¡£
+				//è¿™é‡Œæœ‰ä¸ªä¼˜å…ˆæ€§ï¼Œè§¦å‘å°¾æ€è¶Šæ—©çš„å»è´§ç‰©å’Œè¶Šå°‘çš„é©³å£ç»„
+				//berth_pairçš„firstæ¯”secondå°ï¼Œå…ˆå»è¿œçš„ï¼Œå†ç”¨500mså»è¿‘çš„ã€‚
 				int temp_num = 1000000, pair_id = -1;
 				for (int i = 0; i < 5; i++)
 				{
@@ -332,10 +356,10 @@ void Boat::boat_control()
 			//left_time = berth[aim_berth].transport_time;
 
 
-			cout << "ship " << boat_id << " " << aim_berth_temp << endl; //ÏÈ´¬ºó²´Î»
-			cerr << "ship " << boat_id << " " << aim_berth_temp << endl; //ÏÈ´¬ºó²´Î»
+			cout << "ship " << boat_id << " " << aim_berth_temp << endl; //å…ˆèˆ¹åæ³Šä½
+			cerr << "ship " << boat_id << " " << aim_berth_temp << endl; //å…ˆèˆ¹åæ³Šä½
 		}
-		else//ÔÚ×°»õ
+		else//åœ¨è£…è´§
 		{
 			if (tail_status==0)
 			{
@@ -357,7 +381,7 @@ void Boat::boat_control()
 			{
 				if (berth[pos].num > 0 && num < boat_capacity)
 				{
-					//´¬×ª±äÎªÒÆ¶¯ÖĞ£¬ÏÖÔÚÔÚ0£¬Ç°Íù-1
+					//èˆ¹è½¬å˜ä¸ºç§»åŠ¨ä¸­ï¼Œç°åœ¨åœ¨0ï¼Œå‰å¾€-1
 					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
 					num += add;
 					berth[pos].num -= add;
@@ -376,12 +400,13 @@ void Boat::boat_control()
 	}
 	else
 	{
-		//²´Î»ÍâµÈ´ı×´Ì¬£¬ÔİÊ±²»¿¼ÂÇ
+		//æ³Šä½å¤–ç­‰å¾…çŠ¶æ€ï¼Œæš‚æ—¶ä¸è€ƒè™‘
 	}
 }
 
 bool Robot::robot_dfs(const int& move_num, stack<MyPair> move_order)
 {
+	//cerr << "I am in dfs" << endl;
 	if (robot[move_num].move_or_not)return false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -410,7 +435,7 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair> move_order)
 				int u_op = u.second;
 				robot[u_id].move_or_not = true;
 
-				if (robot[u_id].goods == 0)	//´æÔÚÒş»¼
+				if (robot[u_id].goods == 0)	//å­˜åœ¨éšæ‚£
 				{
 					goods_map[robot[u_id].target_x][robot[u_id].target_y].first = -goods_map[robot[u_id].target_x][robot[u_id].target_y].first;
 				}
@@ -468,7 +493,7 @@ void Robot::clash_solve()
 		if (nxt[x][y] == make_pair(robot[i].x, robot[i].y)) { flag = false; break; }
 	}
 
-	if (flag)//ÈôÏÂÒ»²½Ã»ÓĞ»úÆ÷ÈË
+	if (flag)//è‹¥ä¸‹ä¸€æ­¥æ²¡æœ‰æœºå™¨äºº
 	{
 		MyPair now = { x, y };
 		for (int i = 0; i < 4; i++)
@@ -490,7 +515,7 @@ void Robot::clash_solve()
 		return;
 	}
 
-	bool answer = 0;
+	bool answer = false;
 	move_or_not = true;
 	for (int i = 0; i < 10; i++)
 	{
@@ -498,6 +523,7 @@ void Robot::clash_solve()
 		{
 			stack<MyPair> move_order;
 			answer = robot_dfs(i, move_order);
+			//cerr << "I am out of dfs" << endl;
 			break;
 		}
 	}
@@ -509,8 +535,6 @@ void Robot::clash_solve()
 			if (now + dx_dy[i] == nxt[x][y])
 			{
 				cout << "move " << robot_id << " " << i << endl;
-
-
 
 				x = nxt[now.first][now.second].first;
 				y = nxt[now.first][now.second].second;

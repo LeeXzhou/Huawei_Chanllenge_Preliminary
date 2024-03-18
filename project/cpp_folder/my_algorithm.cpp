@@ -60,7 +60,7 @@ namespace my_alg {
 	}
 	void boat_control()
 	{
-		if (boat[0].status == 0) //ÕýÔÚÒÆ¶¯ÖÐ
+		if (boat[0].status == 0) //ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½
 		{
 
 		}
@@ -68,7 +68,7 @@ namespace my_alg {
 		{
 			if (boat[0].pos == -1)
 			{
-				//ÏÖÔÚÔÚ-1£¬Ç°Íù0£¬´¬×ª±äÎªÒÆ¶¯ÖÐ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-1ï¿½ï¿½Ç°ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½Æ¶ï¿½ï¿½ï¿½
 				boat[0].num = 0;
 				cout << "ship 0 0" << endl;
 			}
@@ -76,7 +76,7 @@ namespace my_alg {
 			{
 				if (berth[boat[0].pos].num > 0)
 				{
-					//´¬×ª±äÎªÒÆ¶¯ÖÐ£¬ÏÖÔÚÔÚ0£¬Ç°Íù-1
+					//ï¿½ï¿½×ªï¿½ï¿½Îªï¿½Æ¶ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½Ç°ï¿½ï¿½-1
 					int add = max(berth[0].loading_speed, berth[0].num);
 					boat[0].num += add;
 					berth[boat[0].pos].num -= add;
@@ -90,7 +90,7 @@ namespace my_alg {
 		}
 		else
 		{
-			//²´Î»ÍâµÈ´ý×´Ì¬£¬ÔÝÊ±²»¿¼ÂÇ
+			//ï¿½ï¿½Î»ï¿½ï¿½È´ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		}
 	}
 	void test_player0()
@@ -107,12 +107,7 @@ namespace my_alg {
 		{
 			boat[i].boat_control();
 		}
-		for (int i = 0; i < 9; i++)
-		{
-			cerr << berth[i].num << '\t';
-		}
-		cerr << endl;
-		
+		/*
 		if (!Search_Policy::policy.empty())
 		{
 			unique_ptr<MyPair[]> result(Search_Policy::choose());
@@ -132,6 +127,7 @@ namespace my_alg {
 				}
 			}
 		}
+		*/
 	}
 }
 
