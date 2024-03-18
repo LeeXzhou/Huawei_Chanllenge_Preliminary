@@ -357,7 +357,6 @@ void Boat::boat_control()
 
 
 			cout << "ship " << boat_id << " " << aim_berth_temp << endl; //先船后泊位
-			cerr << "ship " << boat_id << " " << aim_berth_temp << endl; //先船后泊位
 		}
 		else//在装货
 		{

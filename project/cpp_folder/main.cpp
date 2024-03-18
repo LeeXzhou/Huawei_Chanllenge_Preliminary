@@ -52,7 +52,6 @@ void Init()
 	}
 	
 	threshold__time = 15000 - boat_capacity - trian_time - 10;
-	cerr << "TTTTTTTTTTTTTTTTTTTTTTT" << threshold__time << endl;
 	/// <summary>
 	/// 尾杀时间四个单程加两个容量加一个容错
 	/// 到虚拟点去刷新第一个，先到的找剩余量少的
