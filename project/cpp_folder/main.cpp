@@ -81,11 +81,11 @@ int Input()
 	{
 		int x, y, val;
 		cin >> x >> y >> val;
-		for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 10; j++)
 		{
-			if (dis[x][y][i] != -1)
+			if (dis[x][y][j] != -1)
 			{
-				berth[i].goods_info.insert(Record(id + 1000 - dis[x][y][i], x, y));
+				berth[j].goods_info.insert(Record(id + 1000 - dis[x][y][j], x, y));
 			}
 		}
 		goods_map[x][y] = { val, id + 1000 };
@@ -108,15 +108,6 @@ int Input()
 int main()
 {
 	Init();
-	/*
-	id = Input();
-	for (int i = 0; i < 10; i++)
-	{
-		robot[i].find_berth();
-	}
-	puts("OK");
-	fflush(stdout);
-	*/
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
 		id = Input();
