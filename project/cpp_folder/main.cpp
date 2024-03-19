@@ -108,6 +108,27 @@ int Input()
 int main()
 {
 	Init();
+	/*
+	id = Input();
+	for (int i = 0; i < 10; i++)
+	{
+		robot[i].find_berth();
+	}
+	puts("OK");
+	fflush(stdout);
+	for (int zhen = 0; zhen < 18; zhen++)
+	{
+		id = Input();
+		my_alg::test_player0();
+		if (zhen % 2)
+		{
+			robot[zhen / 2].target_x = -1;
+			robot[zhen / 2].target_y = -1;
+		}		
+		puts("OK");
+		fflush(stdout);
+	}
+	*/
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
 		id = Input();

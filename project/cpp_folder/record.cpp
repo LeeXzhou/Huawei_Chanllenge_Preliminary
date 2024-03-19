@@ -160,6 +160,10 @@ void Robot::find_berth() //找泊位
 
 void Robot::find_road(const int& min_dis)	//给定target下去找路
 {
+	if (x == target_x && y == target_y)
+	{
+		return;
+	}
 	memset(pre, 0, sizeof(pre));
 	memset(visited, false, sizeof(visited));
 	memset(nxt, 0, sizeof(nxt));
