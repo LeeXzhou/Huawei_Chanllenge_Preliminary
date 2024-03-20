@@ -3,36 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\record.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\record.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\my_data_structure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:h_folder\\my_data_structure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\search_policy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\search_policy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\record.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:h_folder\\record.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\my_algorithm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\my_algorithm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\my_data_structure.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\my_data_structure.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\search_policy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\search_policy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\my_algorithm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:h_folder\\my_algorithm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\my_data_structure.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\my_data_structure.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\my_data_structure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:h_folder\\my_data_structure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\my_algorithm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B405EF90-68EA-4F99-8422-095472815CDC}|project.vcxproj|solutionrelative:cpp_folder\\my_algorithm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,23 +42,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "record.h",
               "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\record.h",
               "RelativeDocumentMoniker": "h_folder\\record.h",
               "ToolTip": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\record.h",
               "RelativeToolTip": "h_folder\\record.h",
-              "ViewState": "AQIAADwAAAAAAAAAAAAAADcAAAAAAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABMAAAA3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-03-18T14:49:22.049Z"
+              "WhenOpened": "2024-03-18T14:49:22.049Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "my_data_structure.cpp",
               "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\my_data_structure.cpp",
               "RelativeDocumentMoniker": "cpp_folder\\my_data_structure.cpp",
@@ -66,24 +67,24 @@
               "RelativeToolTip": "cpp_folder\\my_data_structure.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-11T06:27:10.536Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\main.cpp",
-              "RelativeDocumentMoniker": "cpp_folder\\main.cpp",
-              "ToolTip": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\main.cpp",
-              "RelativeToolTip": "cpp_folder\\main.cpp",
-              "ViewState": "AQIAAHgAAAAAAAAAAAAswIMAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-10T11:08:26.072Z",
+              "WhenOpened": "2024-03-11T06:27:10.536Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\main.cpp",
+              "RelativeDocumentMoniker": "cpp_folder\\main.cpp",
+              "ToolTip": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\main.cpp",
+              "RelativeToolTip": "cpp_folder\\main.cpp",
+              "ViewState": "AQIAAI0AAAAAAAAAAAAAAF8AAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-10T11:08:26.072Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "my_algorithm.cpp",
               "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\my_algorithm.cpp",
               "RelativeDocumentMoniker": "cpp_folder\\my_algorithm.cpp",
@@ -95,7 +96,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "my_algorithm.h",
               "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\my_algorithm.h",
               "RelativeDocumentMoniker": "h_folder\\my_algorithm.h",
@@ -107,7 +108,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "my_data_structure.h",
               "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\h_folder\\my_data_structure.h",
               "RelativeDocumentMoniker": "h_folder\\my_data_structure.h",
@@ -119,15 +120,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "record.cpp",
               "DocumentMoniker": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\record.cpp",
               "RelativeDocumentMoniker": "cpp_folder\\record.cpp",
               "ToolTip": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\record.cpp",
               "RelativeToolTip": "cpp_folder\\record.cpp",
-              "ViewState": "AQIAAIgAAAAAAAAAAAAswJsAAAANAAAA",
+              "ViewState": "AQIAAPAAAAAAAAAAAAAuwH4AAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-10T11:08:25.977Z"
+              "WhenOpened": "2024-03-10T11:08:25.977Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -137,9 +139,10 @@
               "RelativeDocumentMoniker": "cpp_folder\\search_policy.cpp",
               "ToolTip": "C:\\Users\\Lee\\Desktop\\GitHub\\Huawei_Chanllenge_Preliminary\\project\\cpp_folder\\search_policy.cpp",
               "RelativeToolTip": "cpp_folder\\search_policy.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAADAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABIAAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-10T11:08:25.975Z"
+              "WhenOpened": "2024-03-10T11:08:25.975Z",
+              "EditorCaption": ""
             }
           ]
         }

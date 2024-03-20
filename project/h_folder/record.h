@@ -17,7 +17,7 @@ public:
 	MyPair pre[200][200], nxt[200][200];
 	bool visited[200][200] = { false };
 	int robot_id = 0;
-	bool move_or_not = false;
+	bool move_or_not = false, no_goods = false;		//地图上没有货物
 	Robot() { };
 	Robot(int startX, int startY);
 	void robot_control();

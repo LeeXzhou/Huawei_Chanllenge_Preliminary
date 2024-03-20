@@ -124,6 +124,7 @@ void Robot::find_goods()	//只有起始和目的地找货物
 	}
 	if (!choice.empty())
 	{
+		no_goods = false;
 		MyPair now = choice.top().target, tmp = {-1, -1};
 		target_x = now.first, target_y = now.second;
 		goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
@@ -216,7 +217,7 @@ void Robot::robot_control()
 	{
 		return;
 	}
-	if (target_x == -1)
+	if (target_x == -1 && !no_goods)
 	{
 		//定个目标地，货物地
 		if (goods == 0)
@@ -228,7 +229,34 @@ void Robot::robot_control()
 			find_berth();
 		}
 	}
-	clash_solve();
+	if (!no_goods)
+	{
+		clash_solve();
+	}
+	else
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			if (x == berth[i].x && y == berth[i].y)
+			{
+				MyPair target = berth[i].find_goods_from_berth();
+				target_x = -1; target_y = -1;
+				if (target.first == -1)
+				{
+					no_goods = true;
+				}
+				else
+				{
+					target_x = target.first, target_y = target.second;
+					goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
+					find_road(dis[target_x][target_y][i]);
+					no_goods = false;
+				}
+				return;
+			}
+		}
+		find_goods();
+	}
 	if (target_x == x && target_y == y)
 	{
 		//修改目标地
@@ -241,18 +269,18 @@ void Robot::robot_control()
 					cout << "pull " << robot_id << endl;
 					goods = 0;
 					berth[i].num += 1;
-					target_x = -1;
-					target_y = -1;
 					MyPair target = berth[i].find_goods_from_berth();
 					if (target.first == -1)
 					{
-						find_goods();
+						no_goods = true;
+						target_x = -1; target_y = -1;
 					}
 					else
 					{
 						target_x = target.first, target_y = target.second;
 						goods_map[target_x][target_y].first = -goods_map[target_x][target_y].first;
 						find_road(dis[target_x][target_y][i]);
+						no_goods = false;
 					}
 					return;
 				}
@@ -434,10 +462,11 @@ bool Robot::robot_dfs(const int& move_num, stack<MyPair> move_order)
 				robot[u_id].target_y = -1;
 				cout << "move " << u_id << " " << u_op << endl;
 
-
 				robot[u_id].x += dx_dy[u_op].first;
 				robot[u_id].y += dx_dy[u_op].second;
 				robot[u_id].move_or_not = true;
+				//robot[u_id].no_goods = false;	
+				//若此时恰好在泊位还无货物，则no_goods为true，移动后不在泊位了不会再有置为false的机会
 				if (robot[u_id].goods == 0)
 				{
 					robot[u_id].find_goods();
@@ -513,7 +542,8 @@ void Robot::clash_solve()
 		if (nxt[x][y] == make_pair(robot[i].x, robot[i].y))
 		{
 			stack<MyPair> move_order;
-			answer = robot_dfs(i, move_order);
+			answer = robot_dfs(i, move_order);	
+			//别的机器人尝试移动，注意若此时地图上没货物，而恰好在泊位处碰撞，则停留在泊位的机器人的no_goods需要修改，否则它一直不动
 			//cerr << "I am out of dfs" << endl;
 			break;
 		}
