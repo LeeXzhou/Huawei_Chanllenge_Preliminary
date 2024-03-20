@@ -47,11 +47,13 @@ public:
 class Boat {
 public:
 	int num = 0, pos = -1, status = -1, boat_id = -1;
-
+	int first_aim = 0, second_aim = 0;
 	int tail_status = -1;
 	int aim_berth = -1, left_time = -1;
+	int rounds = 0;
 	Boat() { };
 	void boat_control();
+	void jihuajingjiweiyuanhui();
 };
 
 extern Berth berth[berth_num + 10];
@@ -68,5 +70,6 @@ static bool trian_on = false;
 static bool trian_or_not[5];
 extern int couple_berth[10];
 static int temp_berth_num[10];
+extern int wait_time[5];
 #endif // !record_h
 

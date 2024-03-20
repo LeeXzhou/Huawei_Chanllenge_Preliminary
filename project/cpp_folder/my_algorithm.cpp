@@ -77,12 +77,18 @@ namespace my_alg {
 			robot[i].robot_control();
 		}
 
-		berth_num_update();
+		/*berth_num_update();
 
 		for (int i = 0; i < 5; i++)
 		{
 			boat[i].boat_control();
 		}
+		*/
+		for (int i = 0; i < 5; i++)
+		{
+			boat[i].jihuajingjiweiyuanhui();
+		}
+
 		/*
 		if (!Search_Policy::policy.empty())
 		{

@@ -319,6 +319,77 @@ void Robot::robot_control()
 //tail_status=-1的时候代表船没进入尾杀阶段
 //tail_status=0的时候代表船在尾杀阶段锁定了第一个港口
 //tail_status=1的时候代表船在尾杀阶段锁定了第二个港口
+void Boat::jihuajingjiweiyuanhui()
+{
+	if (id < wait_time[boat_id])return;
+	if (status == 0) //正在移动中
+	{
+
+	}
+	else if (status == 1)
+	{
+		if (pos == -1)
+		{
+			num = 0;
+			rounds++;
+			if (rounds == 5)
+			{
+				berth[first_aim].close_time = 15000 - 500 - berth[second_aim].transport_time - boat_capacity / berth[second_aim].loading_speed - 1;
+				berth[second_aim].close_time = 15000 - berth[second_aim].transport_time - 1;
+			}
+			cout << "ship " << boat_id << " " << first_aim << endl; //先船后泊位
+		}
+		else//在装货
+		{
+			if (rounds == 5)
+			{
+				if (id >= berth[pos].close_time)
+				{
+					if (pos == first_aim)
+					{
+						cout << "ship " << boat_id << ' ' << second_aim << endl;
+					}
+					else
+					{
+						cout << "go " << boat_id << endl;
+					}
+				}
+				else
+				{
+					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
+					num += add;
+					berth[pos].num -= add;
+				}
+			}
+			else
+			{
+				if (berth[pos].num > 0 && num < boat_capacity)
+				{
+					//船转变为移动中，现在在0，前往-1
+					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
+					num += add;
+					berth[pos].num -= add;
+				}
+				else
+				{
+					if (pos == first_aim)
+					{
+						cout << "ship " << boat_id << ' ' << second_aim << endl;
+					}
+					else
+					{
+						cout << "go " << boat_id << endl;
+					}
+
+				}
+			}
+		}
+	}
+	else
+	{
+		//泊位外等待状态，暂时不考虑
+	}
+}
 
 void Boat::boat_control()
 {

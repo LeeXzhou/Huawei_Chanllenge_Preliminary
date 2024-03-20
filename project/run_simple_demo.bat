@@ -1,1 +1,1 @@
-..\WindowsRelease\PreliminaryJudge.exe -m ..\WindowsRelease\maps\map-3.12.txt .\Debug\project.exe
+..\WindowsRelease\PreliminaryJudge.exe -m ..\WindowsRelease\maps\map-3.10.txt .\Debug\project.exe
