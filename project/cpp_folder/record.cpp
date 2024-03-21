@@ -290,7 +290,7 @@ void Robot::robot_control()
 		}
 		else    //身上没有货物，判断当前位置是不是泊位
 		{
-			/*
+			
 			for (int i = 0; i < 10; i++)
 			{
 				if (x >= berth[i].x && x <= berth[i].x + 3 && y <= berth[i].y + 3 && y >= berth[i].y)
@@ -309,7 +309,7 @@ void Robot::robot_control()
 					return;
 				}
 			}
-			*/
+			
 			cout << "get " << robot_id << endl;	//拿货物
 			find_berth();
 		}
@@ -321,7 +321,7 @@ void Robot::robot_control()
 //tail_status=1的时候代表船在尾杀阶段锁定了第二个港口
 void Boat::jihuajingjiweiyuanhui()
 {
-	if (id < wait_time[boat_id])return;
+	if (id < wait_time)return;
 	if (status == 0) //正在移动中
 	{
 

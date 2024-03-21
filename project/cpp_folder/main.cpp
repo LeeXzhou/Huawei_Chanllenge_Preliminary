@@ -1,5 +1,6 @@
 #include "../h_folder/search_policy.h"
 #include "../h_folder/my_algorithm.h"
+#include<fstream>
 using namespace std;
 Berth berth[berth_num + 10];
 Robot robot[robot_num + 10];
@@ -15,7 +16,11 @@ int threshold__time;
 int trian_time;
 MyPair berth_pair[5];
 int couple_berth[10];
-int wait_time[5];
+int area[200][200];
+double fertile[10];
+double num[10];
+MyPair robot_start[10];
+
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -30,38 +35,94 @@ void Init()
 		berth[id].berth_id = id;
 	}
 	cin >> boat_capacity;
-//三角杀
-	pair<int, int> temp_transport_time[10];
+	char okk[100];	//不知道干嘛的
+	cin >> okk;
+	my_alg::init_dis();
 
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 200; j++)
+		{
+			if (ch[i][j] == '.')
+			{
+				int mindis = 1e9;
+				int num = -1;
+				for (int b = 0; b < 10; b++)
+				{
+					if (dis[i][j][b] != -1)
+					{
+						if (dis[i][j][b] < mindis)
+						{
+							num = b;
+							mindis = dis[i][j][b];
+						}
+					}
+
+				}
+				area[i][j] = num;
+			}
+		}
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 200; j++)
+		{
+			if (ch[i][j] == '.')
+			{
+				fertile[area[i][j]] += 1000.0 / ((30 + dis[i][j][area[i][j]]) * (30 + dis[i][j][area[i][j]]));
+			}
+
+		}
+	}
 	for (int i = 0; i < 10; i++)
 	{
-		temp_transport_time[i] = { berth[i].transport_time,i };
-	}
-	sort(temp_transport_time, temp_transport_time + 10);
-
-	for (int i = 0; i < 5; i++)
-	{
-		trian_time = max(trian_time, temp_transport_time[i].first + temp_transport_time[9 - i].first);
-	}
-	trian_time += 500;
-	for (int i = 0; i < 5; i++)
-	{
-		berth_pair[i] = { temp_transport_time[i].second,temp_transport_time[9 - i].second };
-		couple_berth[temp_transport_time[i].second] = temp_transport_time[9 - i].second;
-		couple_berth[temp_transport_time[9 - i].second] = temp_transport_time[i].second;
+		int robot_access = 0;
+		for (int j = 0; j < 10; j++)
+		{
+			if (dis[robot_start[i].first][robot_start[i].second][j] >= 0)
+			{
+				robot_access++;
+			}
+		}
+		fertile[i] *= robot_access;
+		//cerr << i << ' ' << fertile[i] << endl;
 	}
 
-	threshold__time = 15000 - boat_capacity - trian_time - 10;
+	pair<int, int> temp_fertile[10];
+	for (int i = 0; i < 10; i++)
+	{
+		temp_fertile[i] = { fertile[i],i };
+	}
+	sort(temp_fertile, temp_fertile + 10);
 	for (int i = 0; i < 5; i++)
 	{
-		boat[i].first_aim = berth_pair[i].second;
-		boat[i].second_aim = berth_pair[i].first;
+		boat[i].first_aim = temp_fertile[i].second;
+		boat[i].second_aim = temp_fertile[9 - i].second;
+		if (berth[boat[i].first_aim].transport_time < berth[boat[i].second_aim].transport_time)
+		{
+			swap(boat[i].first_aim, boat[i].second_aim);
+		}
+		int toto_trans_time = berth[boat[i].first_aim].transport_time + berth[boat[i].second_aim].transport_time + 500 +
+			boat_capacity / min(berth[boat[i].first_aim].loading_speed, berth[boat[i].second_aim].loading_speed) + 1;
+
+		boat[i].total_wave = 15000 / (toto_trans_time);
+		boat[i].wait_time = 15000 % toto_trans_time;
 	}
-	for (int i = 0; i < 5; i++)
-	{
-		wait_time[i] = 15000 - 5 * (berth[berth_pair[i].first].transport_time + berth[berth_pair[i].second].transport_time + 500
-			+ max(boat_capacity / berth[berth_pair[i].first].loading_speed, boat_capacity / (berth[berth_pair[i].second].loading_speed) + 2));
-	}
+
+
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	cerr << boat[i].total_wave << '\t';
+	//}
+	//cerr << endl;
+	/// <summary>
+	/// 尾杀时间四个单程加两个容量加一个容错
+	/// 到虚拟点去刷新第一个，先到的找剩余量少的
+	/// </summary>
+
+
 
 	for (int i = 0; i < robot_num; i++)
 	{
@@ -71,9 +132,6 @@ void Init()
 	{
 		boat[i].boat_id = i;
 	}
-	char okk[100];	//不知道干嘛的
-	cin >> okk;
-	my_alg::init_dis();
 	cout << "OK" << endl;
 	fflush(stdout);
 }

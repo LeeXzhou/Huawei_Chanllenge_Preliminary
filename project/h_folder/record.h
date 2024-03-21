@@ -47,12 +47,18 @@ public:
 class Boat {
 public:
 	int num = 0, pos = -1, status = -1, boat_id = -1;
-	int first_aim = 0, second_aim = 0;
+
 	int tail_status = -1;
 	int aim_berth = -1, left_time = -1;
+
 	int rounds = 0;
+	int first_aim;
+	int second_aim;
+	int wait_time = 15000;
+	int total_wave = 0;
 	Boat() { };
 	void boat_control();
+	void boat_contract();
 	void jihuajingjiweiyuanhui();
 };
 
