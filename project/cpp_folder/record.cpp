@@ -337,9 +337,9 @@ void Boat::boat_control()
 			int temp_goods_num = -1;
 			for (int i = 0; i < 10; i++)
 			{
-				if (berth[i].num > temp_goods_num && berth[i].aimed == false)//选取一个没有被锁定且驳口货物量最大的驳口
+				if (berth[i].temp_berth_num > temp_goods_num )//选取一个没有被锁定且驳口货物量最大的驳口
 				{
-					temp_goods_num = berth[i].num;
+					temp_goods_num = berth[i].temp_berth_num;
 					aim_berth_temp = i;
 				}
 			}
@@ -371,7 +371,7 @@ void Boat::boat_control()
 			}
 
 
-			berth[aim_berth_temp].aimed = true;
+			berth[aim_berth_temp].aimed_num +=1;
 			aim_berth = aim_berth_temp;
 			//left_time = berth[aim_berth].transport_time;
 
@@ -384,16 +384,30 @@ void Boat::boat_control()
 			{
 				if (id >= berth[pos].close_time)
 				{
+					berth[pos].aimed_num-=1;
 					cout << "ship " << boat_id << " " << couple_berth[pos] << endl;
 					tail_status = 1;
+				}
+				else
+				{
+					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
+					num += add;
+					berth[pos].num -= add;
 				}
 			}
 			else if (tail_status == 1)
 			{
 				if (id >= berth[pos].close_time)
 				{
+					berth[pos].aimed_num-=1;
 					cout << "go " << boat_id << endl;
 					tail_status = 2;
+				}
+				else
+				{
+					int add = min(berth[pos].loading_speed, min(boat_capacity - num, berth[pos].num));
+					num += add;
+					berth[pos].num -= add;
 				}
 			}
 			else
@@ -407,7 +421,7 @@ void Boat::boat_control()
 				}
 				else
 				{
-					berth[pos].aimed = false;
+					berth[pos].aimed_num-=1;
 					//left_time = berth[aim_berth].transport_time;
 					aim_berth = -1;
 					cout << "go " << boat_id << endl;

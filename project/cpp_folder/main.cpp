@@ -15,6 +15,7 @@ int threshold__time;
 int trian_time;
 MyPair berth_pair[5];
 int couple_berth[10];
+int min_trans_time = 0;
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -38,7 +39,7 @@ void Init()
 		temp_transport_time[i] = { berth[i].transport_time,i };
 	}
 	sort(temp_transport_time, temp_transport_time + 10);
-	
+	min_trans_time = temp_transport_time[0].first;
 	for (int i = 0; i < 5; i++)
 	{
 		trian_time = max(trian_time, temp_transport_time[i].first + temp_transport_time[9 - i].first);

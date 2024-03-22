@@ -62,11 +62,15 @@ namespace my_alg {
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			temp_berth_num[i] = berth[i].num;
-			if (berth[i].aimed)
+			int tp = 0;
+			for (int j = 0; j < 5; j++)
 			{
-				temp_berth_num[i] = max(0, temp_berth_num[i] - boat_capacity);
+				if (boat[j].aim_berth == i)
+				{
+					tp += boat_capacity - boat[j].num;
+				}
 			}
+			berth[i].temp_berth_num = max(0, berth[i].num - tp);
 		}
 	}
 	void test_player0()
@@ -83,6 +87,15 @@ namespace my_alg {
 		{
 			boat[i].boat_control();
 		}
+		if (id == 15000 - min_trans_time + 10)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				cerr << berth[i].num << '\t';
+			}
+		}
+		
+		
 		/*
 		if (!Search_Policy::policy.empty())
 		{

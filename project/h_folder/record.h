@@ -32,12 +32,13 @@ class Berth {
 public:
 	int x = -1;
 	int y = -1;
-	bool aimed = false;
+	int aimed_num = 0;
 	int transport_time = -1;
 	int loading_speed = -1;
 	int num = 0;
 	int berth_id = -1;
 	int close_time = 15000;
+	int temp_berth_num = 0;
 	Berth() { };
 	Berth(int x, int y, int transport_time, int loading_speed);
 	MyPair find_goods_from_berth();
@@ -67,6 +68,5 @@ extern MyPair berth_pair[5];
 static bool trian_on = false;
 static bool trian_or_not[5];
 extern int couple_berth[10];
-static int temp_berth_num[10];
 #endif // !record_h
 
