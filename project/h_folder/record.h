@@ -17,7 +17,7 @@ public:
 	MyPair pre[200][200], nxt[200][200];
 	bool visited[200][200] = { false };
 	int robot_id = 0;
-	bool move_or_not = false;
+	bool move_or_not = false, no_goods = false;		//地图上没有货物
 	Robot() { };
 	Robot(int startX, int startY);
 	void robot_control();
@@ -25,7 +25,7 @@ public:
 	void find_berth();
 	void find_road(const int& min_dis);
 	void clash_solve();
-	bool robot_dfs(const int& move_num, stack<MyPair>move_order);
+	bool robot_dfs(const int& move_num, stack<MyPair> move_order);
 };
 
 class Berth {
@@ -53,11 +53,20 @@ public:
 	Boat() { };
 	void boat_control();
 };
+
 extern Berth berth[berth_num + 10];
 extern Robot robot[robot_num + 10];
 extern Boat boat[10];
 extern int tail_time;
 extern int max_trans_time;
 extern int second_max_trans;
+
+extern int threshold__time;
+extern int trian_time;
+extern MyPair berth_pair[5];
+static bool trian_on = false;
+static bool trian_or_not[5];
+extern int couple_berth[10];
+static int temp_berth_num[10];
 #endif // !record_h
 

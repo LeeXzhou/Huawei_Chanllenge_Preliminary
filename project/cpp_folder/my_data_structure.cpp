@@ -64,5 +64,4 @@ int my_abs(const int& a, const int& b)
         return b - a;
     }
 }
-// 随机数生成器
 

@@ -58,52 +58,32 @@ namespace my_alg {
 			}
 		}
 	}
-	void boat_control()
+	void berth_num_update()
 	{
-		if (boat[0].status == 0) //正在移动中
+		for (int i = 0; i < 10; i++)
 		{
-
-		}
-		else if (boat[0].status == 1)
-		{
-			if (boat[0].pos == -1)
+			temp_berth_num[i] = berth[i].num;
+			if (berth[i].aimed)
 			{
-				//现在在-1，前往0，船转变为移动中
-				boat[0].num = 0;
-				cout << "ship 0 0" << endl;
+				temp_berth_num[i] = max(0, temp_berth_num[i] - boat_capacity);
 			}
-			else
-			{
-				if (berth[boat[0].pos].num > 0)
-				{
-					//船转变为移动中，现在在0，前往-1
-					int add = max(berth[0].loading_speed, berth[0].num);
-					boat[0].num += add;
-					berth[boat[0].pos].num -= add;
-				}
-				else
-				{
-					cout << "go 0" << endl;
-				}
-			}
-			boat[0].status = 0;
-		}
-		else
-		{
-			//泊位外等待状态，暂时不考虑
 		}
 	}
 	void test_player0()
 	{
+		
 		for (int i = 0; i < 10; i++)
 		{
 			robot[i].robot_control();
 		}
+
+		berth_num_update();
+
 		for (int i = 0; i < 5; i++)
 		{
 			boat[i].boat_control();
 		}
-		
+		/*
 		if (!Search_Policy::policy.empty())
 		{
 			unique_ptr<MyPair[]> result(Search_Policy::choose());
@@ -123,6 +103,7 @@ namespace my_alg {
 				}
 			}
 		}
+		*/
 	}
 }
 

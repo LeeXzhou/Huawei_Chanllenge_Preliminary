@@ -11,6 +11,10 @@ int dis[205][205][10];	//-1表示不可达
 int tail_time;
 int max_trans_time;
 int second_max_trans;
+int threshold__time;
+int trian_time;
+MyPair berth_pair[5];
+int couple_berth[10];
 void Init()
 {
 	for (int i = 0; i < n; i++)
@@ -25,16 +29,34 @@ void Init()
 		berth[id].berth_id = id;
 	}
 	cin >> boat_capacity;
-	//尾杀时间
-	int temp_transport_time[10] = { 0 };
+	//三角杀时间
+	
+	pair<int,int> temp_transport_time[10];
+	
 	for (int i = 0; i < 10; i++)
 	{
-		temp_transport_time[i] = berth[i].transport_time;
+		temp_transport_time[i] = { berth[i].transport_time,i };
 	}
 	sort(temp_transport_time, temp_transport_time + 10);
-	tail_time = 15000 - (temp_transport_time[9] + temp_transport_time[8] + boat_capacity) * 2 - temp_transport_time[9] - 2 * boat_capacity;
-	max_trans_time = temp_transport_time[9];
-	second_max_trans = temp_transport_time[8];
+	
+	for (int i = 0; i < 5; i++)
+	{
+		trian_time = max(trian_time, temp_transport_time[i].first + temp_transport_time[9 - i].first);
+	}
+	trian_time += 500;
+	for (int i = 0; i < 5; i++)
+	{
+		berth_pair[i] = {temp_transport_time[i].second,temp_transport_time[9 - i].second};
+		couple_berth[temp_transport_time[i].second] = temp_transport_time[9 - i].second;
+		couple_berth[temp_transport_time[9-i].second] = temp_transport_time[i].second;
+	}
+	
+	threshold__time = 15000 - boat_capacity - trian_time - 10;
+	/// <summary>
+	/// 尾杀时间四个单程加两个容量加一个容错
+	/// 到虚拟点去刷新第一个，先到的找剩余量少的
+	/// </summary>
+
 	for (int i = 0; i < robot_num; i++)
 	{
 		robot[i].robot_id = i;
@@ -59,11 +81,11 @@ int Input()
 	{
 		int x, y, val;
 		cin >> x >> y >> val;
-		for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 10; j++)
 		{
-			if (dis[x][y][i] != -1)
+			if (dis[x][y][j] != -1)
 			{
-				berth[i].goods_info.insert(Record(id + 1000 - dis[x][y][i], x, y));
+				berth[j].goods_info.insert(Record(id + 1000 - dis[x][y][j], x, y));
 			}
 		}
 		goods_map[x][y] = { val, id + 1000 };
@@ -86,17 +108,31 @@ int Input()
 int main()
 {
 	Init();
+	/*
+	id = Input();
+	for (int i = 0; i < 10; i++)
+	{
+		robot[i].find_berth();
+	}
+	puts("OK");
+	fflush(stdout);
+	for (int zhen = 0; zhen < 18; zhen++)
+	{
+		id = Input();
+		my_alg::test_player0();
+		if (zhen % 2)
+		{
+			robot[zhen / 2].target_x = -1;
+			robot[zhen / 2].target_y = -1;
+		}		
+		puts("OK");
+		fflush(stdout);
+	}
+	*/
 	for (int zhen = 1; zhen <= 15000; zhen++)
 	{
 		id = Input();
 		my_alg::test_player0();
-		/*
-		cerr << id << "!";
-		for (int i = 0; i < robot_num; i++)
-		{
-			cout << "move " << i << " " << rand() % 4 << endl;
-		}
-		*/
 		puts("OK");
 		fflush(stdout);
 	}
